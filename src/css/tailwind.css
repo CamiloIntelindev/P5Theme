@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import block compatibility styles so Gutenberg block styles are included in the Tailwind build */
+@import "./blocks.css";
+/* Project components/utilities */
+@import "./theme.css";
+/* Sanasana plugin minimal overrides (conditional dequeue of original assets) */
+@import "./sanasana.css";

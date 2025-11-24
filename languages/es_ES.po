@@ -1,0 +1,188 @@
+# Spanish (Spain) translation for P5Marketing Theme.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: P5Marketing 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-12 00:00+0000\n"
+"PO-Revision-Date: 2025-11-12 00:00+0000\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: Spanish (Spain) <es@li.org>\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: 404.php
+msgid "Page not found"
+msgstr "Página no encontrada"
+
+#: 404.php
+msgid "Sorry, the page you are looking for does not exist or has been moved. Here are some options to continue:"
+msgstr "Lo sentimos, la página que buscas no existe o ha sido movida. Aquí hay algunas opciones para continuar:"
+
+#: 404.php
+msgid "← Back to Home"
+msgstr "← Volver al inicio"
+
+#: 404.php
+msgid "Go to Blog"
+msgstr "Ir al blog"
+
+#: 404.php
+msgid "Recent Posts"
+msgstr "Posts recientes"
+
+#: 404.php
+msgid "No posts available yet."
+msgstr "Aún no hay posts disponibles."
+
+#: search.php
+msgid "Results for: %s"
+msgstr "Resultados para: %s"
+
+#: search.php
+msgid "Found %d result"
+msgid_plural "Found %d results"
+msgstr[0] "Se encontró %d resultado"
+msgstr[1] "Se encontraron %d resultados"
+
+#: search.php
+msgid "By"
+msgstr "Por"
+
+#: search.php
+msgid "Read more →"
+msgstr "Leer más →"
+
+#: search.php
+msgid "← Previous"
+msgstr "← Anterior"
+
+#: search.php
+msgid "Next →"
+msgstr "Siguiente →"
+
+#: search.php
+msgid "Page"
+msgstr "Página"
+
+#: search.php
+msgid "No results found"
+msgstr "No se encontraron resultados"
+
+#: search.php
+msgid "Sorry, we found no results for \"%s\". Try different keywords."
+msgstr "Lo sentimos, no hay resultados para \"%s\". Intenta con otros términos."
+
+#: search.php
+msgid "Explore Blog"
+msgstr "Explorar blog"
+
+#: archive.php
+msgid "Showing %d article"
+msgid_plural "Showing %d articles"
+msgstr[0] "Mostrando %d artículo"
+msgstr[1] "Mostrando %d artículos"
+
+#: archive.php
+msgid "No content available"
+msgstr "No hay contenido disponible"
+
+#: archive.php
+msgid "It seems there are no articles in this category at this time."
+msgstr "Parece que no hay artículos en esta categoría en este momento."
+
+#: template-tags.php
+msgid "Search"
+msgstr "Búsqueda"
+
+#: template-tags.php
+msgid "Error 404"
+msgstr "Error 404"
+
+#: template-tags.php
+msgid "Tag"
+msgstr "Etiqueta"
+
+#: load-more.js (via p5m_load_more_button and AJAX handler)
+msgid "Load More"
+msgstr "Cargar más"
+
+#: load-more.js
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: comments.php
+msgid "%1$s comment"
+msgid_plural "%1$s comments"
+msgstr[0] "%1$s comentario"
+msgstr[1] "%1$s comentarios"
+
+#: comments.php
+msgid "Reply"
+msgstr "Responder"
+
+#: comments.php
+msgid "Older Comments"
+msgstr "Comentarios más antiguos"
+
+#: comments.php
+msgid "Newer Comments"
+msgstr "Comentarios más nuevos"
+
+#: comments.php
+msgid "Leave a Reply"
+msgstr "Dejar una respuesta"
+
+#: functions.php (nav menus)
+msgid "Primary Menu"
+msgstr "Menú Principal"
+
+#: functions.php (nav menus)
+msgid "Footer Menu"
+msgstr "Menú de Pie de Página"
+
+#: functions.php (nav menus)
+msgid "Social Menu"
+msgstr "Menú de Redes Sociales"
+
+#: functions.php (sidebar)
+msgid "Post/Page Sidebar"
+msgstr "Barra Lateral de Posts/Páginas"
+
+#: functions.php (sidebar description)
+msgid "Sidebar para posts y páginas con layout sidebar"
+msgstr "Barra lateral para posts y páginas con diseño de barra lateral"
+
+#: functions.php (metabox)
+msgid "Layout"
+msgstr "Diseño"
+
+#: functions.php (layout option normal)
+msgid "Normal (Centrado, ancho máximo)"
+msgstr "Normal (Centrado, ancho máximo)"
+
+#: functions.php (layout option fullwidth)
+msgid "Full-width (100% ancho)"
+msgstr "Ancho completo (100%)"
+
+#: functions.php (layout option sidebar-right)
+msgid "Con sidebar a la derecha"
+msgstr "Con barra lateral a la derecha"
+
+#: functions.php (layout option sidebar-left)
+msgid "Con sidebar a la izquierda"
+msgstr "Con barra lateral a la izquierda"
+
+#: functions.php (AJAX handler)
+msgid "No more posts found."
+msgstr "No hay más posts disponibles."
+
+#: inc/template-tags.php (p5m_paginate helper)
+msgid "Pagination"
+msgstr "Paginación"

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "custom": {},
+    "color": {
+      "palette": [
+        { "name": "Primary", "slug": "primary", "color": "#1E40AF" },
+        { "name": "Primary Dark", "slug": "primary-dark", "color": "#1E3A8A" },
+        { "name": "Secondary", "slug": "secondary", "color": "#A855F7" },
+        { "name": "Accent", "slug": "accent", "color": "#FBBF24" },
+        { "name": "Success", "slug": "success", "color": "#10B981" },
+        { "name": "Error", "slug": "error", "color": "#EF4444" },
+        { "name": "Warning", "slug": "warning", "color": "#F59E0B" },
+        { "name": "Gray 50", "slug": "gray-50", "color": "#F9FAFB" },
+        { "name": "Gray 100", "slug": "gray-100", "color": "#F3F4F6" },
+        { "name": "Gray 500", "slug": "gray-500", "color": "#6B7280" },
+        { "name": "Gray 700", "slug": "gray-700", "color": "#374151" },
+        { "name": "Gray 900", "slug": "gray-900", "color": "#111827" }
+      ]
+    },
+    "spacing": {
+      "units": [ "px", "rem", "em", "%" ]
+    },
+    "typography": {
+      "fontFamilies": [
+        { "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif", "name": "System", "slug": "system" },
+        { "fontFamily": "\"Georgia\", \"Times New Roman\", serif", "name": "Serif", "slug": "serif" }
+      ],
+      "fontSizes": [
+        { "slug": "xs", "size": "0.75rem", "name": "Extra Small" },
+        { "slug": "sm", "size": "0.875rem", "name": "Small" },
+        { "slug": "base", "size": "1rem", "name": "Base" },
+        { "slug": "lg", "size": "1.125rem", "name": "Large" },
+        { "slug": "xl", "size": "1.25rem", "name": "XL" },
+        { "slug": "2xl", "size": "1.5rem", "name": "2XL" },
+        { "slug": "3xl", "size": "1.875rem", "name": "3XL" },
+        { "slug": "4xl", "size": "2.25rem", "name": "4XL" },
+        { "slug": "5xl", "size": "3rem", "name": "5XL" }
+      ],
+      "lineHeight": true
+    },
+    "layout": {
+      "contentSize": "760px",
+      "wideSize": "1280px"
+    }
+  },
+  "styles": {
+    "elements": {
+      "link": { "color": { "text": "var(--wp--preset--color--primary)" } }
+    }
+  }
+}

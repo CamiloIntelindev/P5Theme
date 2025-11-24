@@ -1,0 +1,40 @@
+<!-- Minimal Cookie Banner with Cookie Storage -->
+<div id="cookie-bar" style="position:fixed;bottom:0;width:100%;background:#0A1F44;color:#fff;font-size:14px;padding:10px 16px;text-align:center;font-family:sans-serif;z-index:9999;display:none;">
+We use cookies to improve your experience and measure ads. 
+By clicking <strong>Accept</strong>, you agree. 
+<a href="/privacy-policy" style="color:#4EC3F7;text-decoration:underline;">Privacy Policy</a> | 
+<a href="/do-not-sell" style="color:#4EC3F7;text-decoration:underline;">Do Not Sell/Share</a>
+<button id="accept-cookies" style="background:#4EC3F7;color:#0A1F44;border:none;padding:6px 14px;margin-left:12px;cursor:pointer;border-radius:4px;">Accept</button>
+</div>
+
+<script>
+(function(){
+  // Helper: get cookie by name
+  function getCookie(name) {
+    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+  }
+  
+  // Helper: set cookie
+  function setCookie(name, value, days) {
+    var expires = '';
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = '; expires=' + date.toUTCString();
+    }
+    document.cookie = name + '=' + (value || '') + expires + '; path=/; SameSite=Lax';
+  }
+  
+  // Check if user already accepted
+  if (!getCookie('cookies_accepted')) {
+    document.getElementById('cookie-bar').style.display = 'block';
+  }
+  
+  // Accept button
+  document.getElementById('accept-cookies').onclick = function() {
+    setCookie('cookies_accepted', '1', 365); // 1 year
+    document.getElementById('cookie-bar').style.display = 'none';
+  };
+})();
+</script>

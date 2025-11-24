@@ -1,0 +1,261 @@
+@layer components {
+  /* ============================================================================
+     Sanasana Plugin CSS Migration to Tailwind
+     Minimal structural styles migrated from plugin CSS for performance.
+     Full plugin CSS conditionally dequeued when shortcodes not present.
+     ============================================================================ */
+  
+  /* CSS Variables (from plugin :root) */
+  :root {
+    --title-green: #97B24D;
+    --title-rose: #BF8573;
+    --title-blue: #738BBF;
+    --title-purple: #C69FC7;
+    --title-golden: rgb(202 183 107);
+    --sanasana-primary: #F9DE42;
+    --sanasana-secondary: #000000;
+    --sanasana-danger: #E84C5B;
+    --sanasana-blue: #5166EC;
+  }
+
+  /* Accordion & Price Tables */
+  .sanasana-accordion-container { 
+    @apply max-w-7xl mx-auto; 
+  }
+  .sanasana-accordion-item { 
+    @apply border-b border-gray-200; 
+  }
+  .sanasana-accordion-row-content { 
+    @apply flex flex-wrap items-start gap-4 py-2; 
+  }
+  h2.sanasana-accordion-col-item_title,
+  .sanasana-accordion-col-item_title { 
+    @apply text-lg font-semibold leading-snug; 
+  }
+  .sanasana-accordion-col-item_price { 
+    @apply text-teal-600 font-bold; 
+  }
+  button.sanasana-accordion-button { 
+    @apply text-sm font-medium px-3 py-2 rounded bg-gray-100 hover:bg-gray-200 transition-colors duration-200; 
+  }
+  .sanasana-accordion-body { 
+    @apply py-4; 
+  }
+  .sanasana-accordion-col-item_description { 
+    @apply text-sm text-gray-600; 
+  }
+
+  /* Price Cards */
+  .price-slider-container {
+    @apply relative w-full overflow-hidden flex items-center justify-center;
+  }
+  .price-container {
+    @apply flex gap-6 overflow-x-auto scroll-smooth max-w-7xl py-5;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .price-container::-webkit-scrollbar {
+    display: none;
+  }
+  .price-card {
+    @apply bg-white rounded-lg p-8 text-center shadow-md relative;
+    width: 24%;
+    max-width: 320px;
+    min-width: 320px;
+    min-height: 880px;
+  }
+  .price-card-nosotros {
+    min-height: 350px;
+  }
+  .price-title {
+    @apply text-2xl font-normal;
+    font-family: "Moranga", serif;
+  }
+  .price-value {
+    @apply mb-2 text-center flex justify-center items-center;
+    color: var(--sanasana-secondary);
+    font-family: "Moranga", serif;
+    font-size: 72px;
+    line-height: 72px;
+  }
+  .price-value > span {
+    @apply text-4xl font-light;
+    font-family: "Moranga", serif;
+  }
+  .price-decription {
+    @apply text-sm text-black text-center;
+    min-height: 70px;
+  }
+  .price-annual {
+    @apply text-xs text-center mb-4 -mt-4;
+    color: var(--sanasana-danger);
+  }
+  .price-button {
+    @apply flex w-44 h-12 px-6 justify-center items-center gap-2 rounded-lg mx-auto no-underline;
+    background: var(--sanasana-primary);
+    color: var(--sanasana-secondary);
+  }
+  .price-button:hover {
+    @apply opacity-90;
+  }
+  .full-button {
+    @apply w-full;
+  }
+  .price-benefits {
+    @apply list-none pl-0 m-0;
+  }
+  .price-benefits li {
+    @apply text-left text-sm flex items-start gap-2 mb-2;
+  }
+  .price-benefits li::before {
+    content: '';
+    @apply inline-block flex-shrink-0;
+    width: 25px;
+    height: 20px;
+    background-image: url('/wp-content/plugins/sanasana/assets/images/check-sanasana.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .recommended {
+    @apply border-4;
+    border-color: var(--sanasana-blue);
+  }
+  .recommended-label {
+    @apply absolute -top-5 left-1/2 -translate-x-1/2 text-white text-base rounded-full inline-flex h-8 min-h-8 px-2 justify-center items-center;
+    background: #4a6fe9;
+  }
+
+  /* Toggle Switch (Annual Price) */
+  .toggle-container {
+    @apply flex items-center gap-2 text-base;
+  }
+  .toggle {
+    @apply w-12 h-6 rounded-full relative cursor-pointer;
+    background-color: var(--sanasana-primary);
+  }
+  .toggle .slider {
+    @apply w-5 h-5 bg-white rounded-full absolute top-1/2 left-1 -translate-y-1/2;
+    transition: left 0.3s ease;
+  }
+  .toggle.active {
+    background-color: #4a6fe9;
+  }
+  .toggle.active .slider {
+    left: 26px;
+  }
+
+  /* Tabs (Horizontal/Vertical) */
+  .tab-container-horizontal {
+    @apply relative max-w-6xl mx-auto overflow-hidden;
+  }
+  .progress-bar-container {
+    @apply relative w-full py-5 overflow-hidden mb-4 cursor-pointer;
+  }
+  .progress-bar-back {
+    @apply bg-blue-50 h-2 w-full rounded-full;
+  }
+  .progress-bar {
+    @apply h-5 rounded-full absolute left-0 top-4;
+    background: #FFD700;
+    transition: width 0.2s ease-in-out, left 0.2s ease-in-out;
+  }
+  .tabs-wrapper {
+    @apply overflow-x-auto whitespace-nowrap flex justify-center pb-2;
+    scrollbar-width: none;
+  }
+  .tabs-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+  ul.nav-tabs-horizontal {
+    @apply flex w-full gap-5 p-0 m-0 list-none justify-between;
+  }
+  .nav-tabs-horizontal .nav-item {
+    @apply flex-1 text-center;
+  }
+  .nav-tabs-horizontal .nav-link {
+    @apply border-0 bg-transparent font-bold text-sm text-black cursor-pointer p-2 w-full max-w-xs;
+    transition: color 0.3s ease;
+  }
+  .nav-tabs-horizontal .nav-link.active {
+    @apply text-yellow-500;
+  }
+
+  /* Form Styles */
+  .learn-more-form-fields {
+    @apply bg-blue-50 p-5;
+  }
+  .learn-more-text {
+    @apply min-h-12 rounded-xl;
+    border: solid 2px #DBD9D5 !important;
+  }
+  .learn-more-item {
+    @apply flex justify-start items-center mb-5;
+  }
+  .learn-more-item > input[type="checkbox"] {
+    @apply h-6 w-6 min-w-6;
+    border: solid 2px #B0B0B0 !important;
+    background-color: #eef0fd !important;
+  }
+  .learn-more-item > label {
+    @apply text-sm ml-2 text-black;
+  }
+  .learn-more-submit-container {
+    @apply py-10 flex flex-wrap flex-col-reverse;
+  }
+  .learn-more-submit-container > input[type="submit"] {
+    @apply w-44 h-12 rounded-lg;
+  }
+  .learn-more-button-container {
+    @apply flex w-full justify-end;
+  }
+
+  /* Hero Buttons */
+  .hero-container-button {
+    @apply flex gap-5 justify-start items-center flex-wrap;
+  }
+  .hero-ingresa-menu-button > a.custom-menu-button-link {
+    @apply w-full h-full flex justify-center items-center text-base rounded-lg;
+    background: var(--sanasana-primary);
+    color: var(--sanasana-secondary) !important;
+  }
+  .hero-ingresa-menu-button > a.custom-menu-button-link:hover {
+    @apply bg-transparent;
+    border: solid 2px var(--sanasana-primary);
+    color: var(--sanasana-primary) !important;
+  }
+  .hero-programs-menu-button > a.custom-menu-button-link {
+    @apply w-full h-full bg-transparent flex justify-center items-center text-base rounded-lg;
+    border: solid 2px var(--sanasana-primary);
+    color: var(--sanasana-primary) !important;
+  }
+  .hero-programs-menu-button > a.custom-menu-button-link:hover {
+    background: var(--sanasana-primary);
+    color: var(--sanasana-secondary) !important;
+  }
+
+  /* View Details Link */
+  .view_details_container {
+    @apply absolute bottom-8 left-0 right-0 mx-auto h-8 z-10 flex justify-center items-center;
+  }
+  .view_details-link {
+    @apply font-normal;
+  }
+
+  /* Program Benefit Blocks */
+  .program-benefit-title {
+    @apply text-4xl leading-10 mb-5 py-5 text-left;
+    font-family: "Moranga", serif;
+    font-weight: 600 !important;
+  }
+  .program-benefit-block {
+    @apply bg-white p-8 my-5 rounded-lg;
+    padding-left: 110px;
+    padding-right: 110px;
+  }
+  .program-benefit-block > ul.price-benefits {
+    @apply ml-5;
+  }
+  .program-benefit-block > ul.price-benefits > li {
+    @apply mb-5;
+  }
+}

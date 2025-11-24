@@ -1,0 +1,901 @@
+/*
+Theme Name: P5Marketing
+Theme URI: https://p5mark.com
+Author: P5Marketing
+Description: Minimal headless theme with Tailwind for fallback rendering.
+Version: 1.0
+Text Domain: p5marketing
+*/
+/*nav-menu-container*/
+.nav-menu-container{
+  width: 100%;
+  max-width: 1480px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+ul#menu-main-menu-1{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  min-width: 100%;
+  width: 100%;
+  padding: 20px;
+}
+ul#menu-main-menu-1 > li.menu-item {
+    width: 10%;
+}
+ul#menu-main-menu-1 > li.menu-item > a.wp-block-navigation-item__content{
+  color: #ffffff;
+}
+    
+/* Global custom: legacy container removed. Use .p5-container via Tailwind build. */
+/* Layout width control (static classes) */
+.p5m-width-full .entry-content, .p5m-width-full .site-content { max-width:100% !important; width:100% !important; }
+.p5m-width-1024 .entry-content, .p5m-width-1024 .site-content { max-width:1024px; margin-left:auto; margin-right:auto; }
+.p5m-width-1152 .entry-content, .p5m-width-1152 .site-content { max-width:1152px; margin-left:auto; margin-right:auto; }
+.p5m-width-1280 .entry-content, .p5m-width-1280 .site-content { max-width:1280px; margin-left:auto; margin-right:auto; }
+.p5m-width-1440 .entry-content, .p5m-width-1440 .site-content { max-width:1440px; margin-left:auto; margin-right:auto; }
+.p5m-width-1600 .entry-content, .p5m-width-1600 .site-content { max-width:1600px; margin-left:auto; margin-right:auto; }
+.p5m-width-1728 .entry-content, .p5m-width-1728 .site-content { max-width:1728px; margin-left:auto; margin-right:auto; }
+.p5m-width-1920 .entry-content, .p5m-width-1920 .site-content { max-width:1920px; margin-left:auto; margin-right:auto; }
+ul#menu-menu-primary {
+    gap: 20px;
+}
+/* Espacio para el ícono */
+.wp-block-navigation-item.has-child > .wp-block-navigation-item__content {
+  position: relative;
+  padding-right: 1.25rem; /* 20px */
+	
+}
+.book-contact{
+  font-size: 16px;
+  line-height: 1.2;
+  border: 1px solid #0040ea;
+  background: linear-gradient(to bottom, #276aff 0%, #094cf6 100%);
+  padding: 12px 24px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  background: #5166EC;
+  border-radius: 8px;
+  /* transition: background .9s; */
+  width: 100%;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 24px;
+  min-width: 180px;
+  min-height: 48px;
+}
+/* Chevron con pseudo-elemento */
+.wp-block-navigation-item.has-child > .wp-block-navigation-item__content::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%);
+  background: currentColor;
+  opacity: .7;
+  /* máscara con SVG (chevron down) */
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='black'><path d='M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z'/></svg>") no-repeat center / contain;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='black'><path d='M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z'/></svg>");
+}
+.wp-block-navigation-item.has-child:hover > .wp-block-navigation-item__content::after {
+  transform: translateY(-50%) rotate(180deg);
+  transition: transform 0.2s ease-in-out;
+}
+.wp-block-navigation-item.has-child > .wp-block-navigation-item__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.wp-block-gallery {
+    display: flex;
+    gap: 20px;
+}
+.wp-block-image > img{
+	flex: none !important;
+    height: auto !important;
+    object-fit: scale-down !important;
+}
+details.wp-block-details {
+    padding: 10px 0;
+    border-bottom: solid 1px;
+    margin-bottom: 10px;
+}
+details.wp-block-details > summary {
+    display: list-item;
+    font-family: Montserrat, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    text-align: left;
+    margin-bottom: 15px;
+}
+details.wp-block-details > p{
+    padding: 15px;
+    background: #f9f9f9;
+    line-height: 2;
+	font-weight: 300;
+}
+
+.wp-block-separator {
+  
+    border-top-color: #ccc;
+    border-top-style: solid 1px;
+    margin-top: 20px !important;
+    margin-right: 20px;
+    margin-bottom: 20px !important;
+    margin-left: 20px;
+}
+.block-editor-block-list__layout.is-root-container > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+  max-width: 1440px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+:where(.wp-block-columns) {
+    margin-bottom: 0.1em !important;
+    margin-top: .1em !important;
+}
+.wp-block-image img {
+    box-sizing: border-box;
+    height: auto;
+    max-width: 300px !important;
+    vertical-align: bottom;
+    margin: auto !important;
+}
+.wp-block-separator {
+  border: solid 1px #cccccc;
+  margin-top: 20px !important;
+  margin-bottom: 50px !important;
+}
+@media(max-width: 1024px){
+    nav.nav-menu-desktop{
+        display: none;
+    }
+    .wp-block-navigation-item.has-child > .wp-block-navigation-item__content::after {
+      content: "";
+      position: unset;
+      right: unset;
+      top: unset;
+      width: unset;
+      height: unset;
+      transform: unset;
+      background: unset;
+      opacity: unset;
+      /* máscara con SVG (chevron down) */
+      -webkit-mask: unset;
+    mask: unset;
+      display: none !important;
+    }
+}
+
+*/
+#menu-item-125  > a.menu-link > span.menu-text,
+#menu-item-3982 > a.menu-link > span.menu-text{
+  text-transform: capitalize;
+}
+/*eliminar clear*/
+.fl-row .fl-col h3.fl-node-uicvg921yle0, .fl-row .fl-col h3.fl-node-uicvg921yle0 a, h3.fl-node-uicvg921yle0, h3.fl-node-uicvg921yle0 a {
+    display: none;
+    color: #5166ec;
+}
+/*button home*/
+.button-home{
+  width: 100%;
+    display: flex;
+   justify-content: center;
+}
+/*Headings*/
+.fl-builder-content h1 {
+    font-family: "Moranga Light", Verdana, Arial, sans-serif;
+    font-weight: 700;
+}
+/*Nav menu */
+.menu-text{
+  font-family: Poppins, sans-serif !important;
+}
+.menu-text:hover{
+  color: #F9DE42 !important;
+  font-weight: 500;
+}
+.main-header-menu .sub-menu {
+    background: #ffffff !important;
+    border-radius: 10px !important;
+}
+.main-header-menu > .menu-item > .sub-menu > .menu-item > a.menu-link > .menu-text{
+  color: #000000 !important;
+}
+
+.wpml-ls-current-language > .sub-menu {
+    background: #ffffff !important;
+    border-radius: 10px !important;
+}
+
+/*fondo*/
+#page .site-content {
+    background-color: #F9F8F5;
+    flex-grow: 1;
+}
+
+/*pagina nueva ploiticas*/
+.beneficios{
+  text-align:justify;
+}
+/*Nav menu*/
+.site-header {
+    background: transparent !important;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+
+}
+
+
+.nuestro-equipo > .fl-row-content-wrap > .fl-row-content > div[data-node="5f9mtadx7riq"]{
+  justify-content: center;
+  gap: 40px;
+}
+.columna-02{
+  max-width:773px;
+
+}
+.columna-01{
+  max-width:547px;
+}
+/*Programas*/
+
+.program-benefit-block {
+  background: #ffffff;
+  padding: 20px 20px 30px 20px;
+  margin: 20px 20px 20px 20px;
+  border-radius: 10px;
+}
+
+/*nosotros*/
+.row-seccion-alianza > .fl-row-content-wrap > .fl-row-content > div[data-node="isze7h0jrvcl"]{
+  justify-content: center;
+  gap: 20px;
+}
+.column-ima{
+  max-width: 773px;
+}
+.column-cima{
+  max-width: 547px;
+
+}
+.row-seccion-nuestro > .fl-row-content-wrap > .fl-row-content >  div[data-node="jarkgs69cbyp"]{
+  justify-content: center;
+  gap: 20px;
+}
+.column-imagen{
+  max-width:900px;
+}
+.column-nuestro{
+  max-width:560px;
+}
+.nosotros-row > .fl-row-content-wrap > .fl-row-content > div[data-node="d4rzj208a79l"]{
+  justify-content: center;
+  /*gap: 10px;*/
+}
+.column-icono{
+  max-width: 280px;
+  height: 272px;
+}
+
+.nosotros-row-column > .fl-row-content-wrap > .fl-row-content > div[data-node="d4rzj208a79l"]{
+  justify-content: center;
+  gap: 10px;
+}
+
+.nosotros-three-column {
+  max-width: 434px;
+}
+/*Carrusel*/
+.uabb-image-carousel-caption {
+  overflow: initial !important;
+  white-space: normal !important ;
+}
+.uabb-image-carousel-content {
+  width: 100px;
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  margin-left:100px;
+}
+
+.play{
+  width: 60px; /* Ajusta el tamaño del círculo */
+  height: 60px; /* Debe ser igual al ancho para formar un círculo */
+  background-color: #D4D4D866;
+  border-radius: 50%; /* ¡Esto hace el círculo! */
+  display: flex; /* Para centrar el triángulo dentro */
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+}
+
+/*menu contactanos*/
+/*
+.ast-builder-menu-1 .menu-item > .menu-link:hover,
+.ast-builder-menu-1 .menu-item.current-menu-item > .menu-link {
+  color: #fadf42 !important;
+  font-weight: 600;
+}
+*/
+.circulo-1{
+  background-color: #ffe23f;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+
+.fl-menu a {
+  display: inline;
+
+}
+
+/*header politicas fondo*/
+.fl-theme-builder-header-sticky.fl-theme-builder-header-scrolled {
+  background:#F9F8F5;
+  box-shadow: 0 2px 10px 0 rgba(36, 50, 66, .075);
+}
+
+/*header politicas*/
+.fl-builder-content .fl-node-lr48gqa5dt6f .menu > li > a, .fl-builder-content .fl-node-lr48gqa5dt6f .menu > li > .fl-has-submenu-container > a, .fl-builder-content .fl-node-lr48gqa5dt6f .sub-menu > li > a, .fl-builder-content .fl-node-lr48gqa5dt6f .sub-menu > li > .fl-has-submenu-container > a {
+  text-align: left;
+  color: #050000;
+}
+/*Home hero*/
+.column-container-mouse-home {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: fit-content;
+}
+
+/*parrafo terminos*/
+.parrafo-terminos{
+  text-align:justify;
+}
+/*parrafo politicas*/
+.parrafo-principal{
+  text-align:justify;
+}
+.parrafo-politica{
+  text-align:justify;
+}
+/*nav menu*/
+
+.relative{
+  position: relative;
+}
+.absolute{
+  position: absolute;
+}
+.yellow-text{
+  color: #F9DE42 !important;
+}
+.white-text{
+  color: #ffffff;
+}
+.strong-text{
+  font-weight: 700 !important;
+}
+.ast-sticky-active .main-header-menu > .menu-item > .menu-link,
+.main-header-bar.ast-sticky-active .main-header-menu > .menu-item > .menu-link{
+  color: #ffffff;
+}
+
+.ast-builder-menu-1 .sub-menu{
+  border-top-width: 0 !important;
+
+}
+ul#ast-hf-menu-1 > li.menu-item > a.menu-link{
+  font-family: Poppins, sans-serif !important;
+}
+
+li#menu-item-wpml-ls-4-en > ul.sub-menu {
+    border-radius: 8px;
+    max-width: 160px;
+}
+li#menu-item-wpml-ls-4-en > ul.sub-menu > li#menu-item-wpml-ls-4-es > a{
+  color: #000000;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: Poppins, sans-serif !important;
+}
+li#menu-item-wpml-ls-4-en > ul.sub-menu > li#menu-item-wpml-ls-4-es > a:hover{
+  color: #000000 !important;
+}
+
+li#menu-item-wpml-ls-4-en > ul.sub-menu > li#menu-item-wpml-ls-4-es > a > .menu-text > .wpml-ls-display{
+  display: none !important;
+}
+
+
+li#menu-item-wpml-ls-4-es > ul.sub-menu {
+    border-radius: 8px;
+    max-width: 160px;
+}
+li#menu-item-wpml-ls-4-es > ul.sub-menu > li#menu-item-wpml-ls-4-en > a{
+  color: #000000;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: Poppins, sans-serif !important;
+}
+li#menu-item-wpml-ls-4-es > ul.sub-menu > li#menu-item-wpml-ls-4-en > a:hover{
+  color: #000000 !important;
+}
+li#menu-item-wpml-ls-4-es > ul.sub-menu > li#menu-item-wpml-ls-4-en > a > .menu-text > .wpml-ls-display{
+  display: none !important;
+}
+
+
+
+/*Buttons on front page hero*/
+.buttons-group-hero > .fl-module-content .fl-button-group > .fl-button-group-buttons > .fl-button-group-button > .fl-button-wrap > .fl-button{
+  width: 220px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+.buttons-group-hero > .fl-module-content .fl-button-group > .fl-button-group-buttons > .fl-button-group-button > .fl-button-wrap > .fl-button > .fl-button-text{
+  line-height: 1;
+}
+
+.relative-hero{
+  position: relative;
+}
+.relative-hero > .fl-row-content-wrap > .fl-row-content{
+  position: unset;
+}
+.column-mouse-home-hero{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+}
+a.custom-menu-button-link{
+  color: #ffffff !important;
+  font-size: 16px;
+}
+
+.animate-nav-in > .site-primary-header-wrap > .ast-builder-grid-row  > .site-header-primary-section-right > .header-widget-area > #block-8 > .my-custom-switcher::before{
+  top: 15px;
+}
+
+
+/*Contact Form*/
+input.field-name,
+input.field-emails,
+textarea.field-message{
+  min-height: 48px !important;
+  border-radius: 8px !important;
+}
+span[data-name="field-message"],
+span[data-name="field-emails"],
+span[data-name="field-name"]{
+  position: relative;
+}
+span[data-name="field-emails"]::after{
+  content: "Correo electrónico";
+}
+span[data-name="field-name"]::after{
+  content: "Nombre y Apellido";
+}
+span[data-name="field-message"]::after{
+  content: "Mensaje";
+}
+
+span[data-name="field-message"]::after,
+span[data-name="field-emails"]::after,
+span[data-name="field-name"]::after{
+  position: absolute;
+  left: 10px;
+  top: 5px;
+  font-family: Poppins;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; 
+  color: #5166EC !important;
+}
+
+.btn-yellow{
+  display: flex;
+  width: 220px;
+  height: 48px;
+  padding: 0px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  background: #F9DE42;
+  color: #000000;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.wpcf7-form > p > span{
+  margin-bottom: -10px !important;
+}
+
+ul#menu-footer-menu > li.menu-item{
+  border-right: solid 1px #000000;
+  margin-left: 0;
+  margin-right: 0;
+}
+ul#menu-footer-menu > li.menu-item:nth-child(3){
+  border-right: none;
+}
+
+ul#menu-footer-menu > li.menu-item > a,
+ul#menu-footer-menu > li.menu-item > a > span.menu-item-text{
+  color: #000000;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+figure.wp-block-image.size-full.whatsapp_icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+.footer-tiny-text {
+    text-align: center;
+    font-family: Poppins, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1;
+    padding-left: 4rem;
+}
+ul#menu-footer-menu {
+    list-style: none;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+  ul#menu-footer-menu > li:nth-child(2){
+  border-right: solid 1px #000000;
+  border-left: solid 1px #000000;
+  padding: 0 10px;
+}
+  ul#menu-footer-menu > li > a{
+  font-family: Poppins, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+}
+/*Programas templates*/
+.programa-price-page{
+  position: relative;
+}
+/*Variacion Medica*/
+
+h3.uabb-list-icon-text-heading {
+    font-family: 'Poppins' important!;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+}
+h2.fl-module.fl-module-heading.fl-heading.fl-heading-text.fl-node-a6kpl3j4zu7x {
+    font-size: 36px;
+    font-family: 'Moraga-medium' !important;
+    font-weight: 700;
+    margin: 20px 0;
+}
+/*Variacion Medica evaluacion para adolecentes*/
+  .evaluation-column-text {
+    padding-bottom: 5px;
+    overflow-y: scroll;
+    max-height: 881px;
+  }
+.yellow-top-bar > .fl-col-content{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start !important;
+  align-items: center;
+}
+.yellow-top-bar > .fl-col-content > .fl-module-photo{
+  margin: 0 20px;
+}
+.variacion-h3 {
+    font-size: 36px !important;
+    font-family: 'Moranga Medium' !important;
+    font-weight: 700 !important;
+}
+.uabb-image-content > img {
+    width: 30px !important;
+    min-width: 30px;
+}
+/********************/
+.yellow-bar-text {
+    font-size: 18px;
+    font-family: 'Poppins' !important;
+    font-weight: 400;
+}
+.uabb-list-icon-text > h3.uabb-list-icon-text-heading{
+  font-size: 20px;
+  line-height: 28px;
+}
+.uabb-list-icon-wrap > .uabb-callout-outter{
+  margin-right: 10px !important;
+}
+h3[data-node="q1s6girbdey4"]{
+  font-size: 36px;
+  font-weight: 700;
+}
+/******************/
+/*end Variacion Medica*/
+
+
+
+
+@media (max-width: 1440px){
+  .column-icono{
+    max-width: 310px;
+    height: 272px;
+  }
+}
+
+@media(min-width: 1388px){
+  .main-header-menu .menu-link, .main-header-menu>a {
+    padding: 0 2em;
+  }
+}
+@media(min-width: 1308px){
+  .main-header-menu .menu-link, .main-header-menu>a {
+    padding: 0 1.5em;
+  }
+}
+@media (max-width: 1092px) {
+    .fl-node-4ns9prgod6h3 .uabb-image-carousel-caption, .fl-node-4ns9prgod6h3 .uabb-background-mask .uabb-caption{
+        background-color: #F9F8F5;
+        font-size: 18px;
+        line-height: 28px;
+        text-align: center;
+    }
+  .uabb-image-carousel-content {
+    width: 100px;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    margin-left:130px;
+  }
+  .variations-yellow-top {
+    display: none !important;
+  }
+  ul#menu-main-menu-1 > li.menu-item > a{
+    color : #ffffff !important;
+    padding-left: 20px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+@media(max-width: 768px){
+  /*Responsive Nav menu*/
+  .ast-primary-header-bar.ast-primary-header.main-header-bar.site-primary-header-wrap.site-header-focus-item.ast-builder-grid-row-layout-default.ast-builder-grid-row-tablet-layout-default.ast-builder-grid-row-mobile-layout-default {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  ul#menu-footer-menu-1 > li.menu-item > a,
+  ul#menu-footer-menu-1 > li.menu-item > a > span.menu-item-text{
+    color: #000000;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  ul#menu-footer-menu-1{
+    margin-bottom: 20px;
+  }
+  .whatasapp-column {
+    position: absolute;
+    right: 5%;
+    bottom: 30px;
+    margin: auto;
+    width: fit-content;
+  }
+	
+  figure.wp-block-image.size-full.whatsapp_icon {
+    max-height: 70px;
+    max-width: 70px;
+  }
+
+  .card{
+    margin-top:15px;
+  }
+  
+  /*Nosotros*/
+  .nosotros-three-column {
+    margin-top:10px;
+    min-width:100%;
+    max-width: 434px;
+
+  }
+  .program-benefit-block {
+    background: #ffffff;
+    padding: 20px 20px 30px 20px;
+    margin: 20px 0px 20px 0px;
+    border-radius: 10px;
+  }
+	
+  .circulo-1{
+    background-color: #ffe23f;
+    border-radius: 50%;
+    width: 85px;
+    height: 85px;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  }
+  .column-imagen{
+    max-width:773px;
+  }
+  .column-nuestro{
+    max-width:547px;
+  }
+  .column-imagen{
+    max-width:773px;
+  }
+  .column-nuestro{
+    max-width:547px;
+  } 
+  .circulo-1 {
+    background-color: #ffe23f;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+	
+      .fl-col-small:not(.fl-col-small-full-width) {
+         max-width: 600px; 
+    }
+	
+      .tab-card-mobile-item .tab-card-mobile-content {
+        font-size: 16px ;
+        line-height: 20px;
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    .uabb-image-carousel-content {
+    width: 100px;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    margin-left:120px;
+  }
+	
+  /********************/
+.yellow-bar-text {
+    font-size: 16px !important;
+    font-family: 'Poppins' !important;
+    font-weight: 400;
+}
+.uabb-list-icon-text > h3.uabb-list-icon-text-heading{
+  font-size: 18px;
+  line-height: 24px;
+}
+  .evaluation-plus-icon > .fl-photo-content > img.fl-photo-img,
+  .variations-content > .fl-row-content-wrap > .fl-row-content > .fl-col-group > .fl-col > .fl-module > .fl-photo-content > img.fl-photo-img{
+    width: 15px !important;
+    height: 22.5px !important;
+    min-width: 15px !important;
+    min-height: 22.5px !important;
+    max-width: 15px !important;
+    max-height: 22.5px !important;
+  }
+  .variations-content > .fl-row-content-wrap > .fl-row-content > .fl-col-group > .fl-col > .fl-col-content > .fl-col-group > .fl-col  > .fl-col-content{
+    margin: 10px 0;
+  }
+}
+@media (max-width: 544px) {
+  .ast-header-break-point .ast-below-header-bar {
+      display: block !important;
+  }
+  .ast-mobile-header-content.content-align-flex-start {
+    margin-top: -30px;
+  }
+
+  .variations-yellow-top {
+    display: none;
+  }
+	
+  .evaluation-column-text {
+    padding-bottom: 0px;
+    overflow-y: none !important;
+    max-height: unset;
+  }
+  /*Logo*/
+  .logo-responsive{
+    max-width: 107px;
+    height: auto;
+  }
+	/*Botton book*/
+  .book-contact{
+    font-size: 12px;
+    line-height: 1;
+    padding: 0;
+    width: 100%;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px;
+    min-height: 32px;
+  }
+  .nav-menu-container{
+    padding: 20px;
+  }
+}
+@media(max-width: 412px){
+  .ingresa-menu-button .custom-menu-button-link {
+    max-width: 100px;
+    max-height: 32px;
+    font-size: 12px;
+  }
+  .uabb-image-carousel-content {
+    width: 100px;
+    position: relative;
+    text-align: center; 
+    overflow: hidden;
+    margin-left: 126px !important;
+  }
+  .ast-mobile-header-content.content-align-flex-start {
+      margin-top: -30px;
+    }
+}
+/* ============================================================================
+   P5M Language Switcher in Menu
+   ============================================================================ */
+
+/* Highlight del idioma activo en el submenu */
+.p5m-lang-switcher .sub-menu .current-menu-item a {
+  background: rgba(37, 99, 235, 0.05);
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* Prevenir que el link principal sea clickeable */
+.p5m-lang-switcher > a {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Permitir hover en el parent para mostrar submenu */
+.p5m-lang-switcher {
+  pointer-events: auto;
+}
+

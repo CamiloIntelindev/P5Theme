@@ -1,0 +1,211 @@
+@layer components {
+  /* Images inside image blocks */
+  figure.wp-block-image,
+  .wp-block-image {
+    margin: 0 0 1rem;
+  }
+  figure.wp-block-image img,
+  .wp-block-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  figure.wp-block-image figcaption,
+  .wp-block-image .wp-caption-text {
+    font-size: .875rem;
+    color: #6b7280;
+    margin-top: .5rem;
+  }
+
+  /* Gallery */
+  .wp-block-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: .5rem;
+    margin: 0 0 1rem;
+  }
+
+  /* Buttons */
+  .wp-block-button {
+    display: inline-block;
+    margin: 0 0 1rem;
+  }
+  .wp-block-button .wp-block-button__link {
+    display: inline-block;
+    padding: .5rem 1rem;
+    border-radius: .375rem;
+    background-color: #111827;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* Align wide / full */
+  .alignwide {
+    width: 100%;
+    max-width: 72rem; /* 1152px */
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .alignfull {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  /* Cover block */
+  .wp-block-cover {
+    position: relative;
+    min-height: 24rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+  }
+  .wp-block-cover__inner-container { width: 100%; }
+
+  /* Quotes, lists and common blocks */
+  .wp-block-quote {
+    border-left: 4px solid #e5e7eb;
+    padding-left: 1rem;
+    color: #374151;
+    margin: 0 0 1rem;
+  }
+  .wp-block-latest-posts__list,
+  .wp-block-list {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+  }
+
+  /* Make sure images with specific classes don't overflow */
+  img[class*="wp-image-"] {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Small helpers used by blocks */
+  .is-style-rounded {
+    border-radius: .5rem;
+  }
+}
+.block-editor-block-list__layout.is-root-container > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+  max-width: 1440px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* Mobile submenu adjustments: when inside #mobile-nav (mobile menu), show submenus as full-width stacked lists */
+@media (max-width: 1023px) {
+  #mobile-nav .wp-block-navigation__submenu-container {
+    position: static;
+    left: auto;
+    top: auto;
+    margin-top: 0;
+    min-width: auto;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    display: none;
+    padding-left: 0;
+  }
+  #mobile-nav li.open > .wp-block-navigation__submenu-container {
+    display: block;
+  }
+
+  /* Make submenu items full width and inherit parent spacing */
+  #mobile-nav .wp-block-navigation__submenu-container .wp-block-navigation-item {
+    display: block;
+    width: 100%;
+  }
+
+  /* Toggle button styles */
+  #mobile-nav .submenu-toggle {
+    background: transparent;
+    border: none;
+    color: inherit;
+  }
+}
+
+/* Toggle button inside link: place to the far right and small hit area */
+@media (max-width: 1023px) {
+  #mobile-nav a .submenu-toggle {
+    float: right;
+    margin-left: 0.5rem;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Ensure the parent link is full width and the submenu toggle doesn't overlap text */
+  #mobile-nav a {
+    display: block;
+    width: 100%;
+    padding-right: 3rem; /* leave space for toggle */
+  }
+}
+
+/* Hide default caret/icons that WordPress or block markup may inject inside links
+   on mobile so we don't have duplicate toggles. Our .submenu-toggle (a button)
+   is kept visible because it's not a direct child SVG of the anchor. */
+@media (max-width: 1023px) {
+  /* hide direct SVG children of anchor tags (common source of duplicate carets) */
+  #mobile-nav a > svg { display: none; }
+  /* hide common WP navigation expand elements if present */
+  #mobile-nav a > .wp-block-navigation__submenu-indicator,
+  #mobile-nav a > .wp-block-navigation__expand,
+  #mobile-nav a > .wp-block-navigation__expand-toggle {
+    display: none;
+  }
+
+  /* Hide the default pseudo-icon added by navigation items on mobile (right side) */
+  #mobile-nav .wp-block-navigation-item.has-child > .wp-block-navigation-item__content::after {
+    display: none;
+    content: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+  P5M Utility Tokens (responsive-friendly)
+  Clases simples para aplicar en "Additional CSS Class(es)" de los bloques.
+  Nota: usamos CSS plano para evitar dependencias del compilador en @apply.
+--------------------------------------------------------------------------- */
+/* Padding (todo el contenedor) */
+.pad-0  { padding: 0; }
+.pad-xs { padding: 0.5rem; }
+.pad-sm { padding: 1rem; }
+.pad-md { padding: 1.5rem; }
+.pad-lg { padding: 2rem; }
+.pad-xl { padding: 3rem; }
+
+/* Padding eje X (izq/der) */
+.padx-0  { padding-left: 0; padding-right: 0; }
+.padx-xs { padding-left: 0.5rem; padding-right: 0.5rem; }
+.padx-sm { padding-left: 1rem;   padding-right: 1rem; }
+.padx-md { padding-left: 1.5rem; padding-right: 1.5rem; }
+.padx-lg { padding-left: 2rem;   padding-right: 2rem; }
+.padx-xl { padding-left: 3rem;   padding-right: 3rem; }
+
+/* Padding eje Y (arriba/abajo) */
+.pady-0  { padding-top: 0; padding-bottom: 0; }
+.pady-xs { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.pady-sm { padding-top: 1rem;   padding-bottom: 1rem; }
+.pady-md { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.pady-lg { padding-top: 2rem;   padding-bottom: 2rem; }
+.pady-xl { padding-top: 3rem;   padding-bottom: 3rem; }
+
+/* Margin (contenedor completo) – pequeño set */
+.mar-0  { margin: 0; }
+.mar-sm { margin: 1rem; }
+.mar-md { margin: 1.5rem; }
+.mar-lg { margin: 2rem; }
+
+/* Helpers de visibilidad mínimos */
+.only-mobile  { display: block; }
+@media (min-width: 768px) { .only-mobile { display: none !important; } }
+
+.only-tablet  { display: none; }
+@media (min-width: 768px) and (max-width: 1023.98px) { .only-tablet { display: block !important; } }
+
+.only-desktop { display: none; }
+@media (min-width: 1024px) { .only-desktop { display: block !important; } }

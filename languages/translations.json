@@ -1,0 +1,62 @@
+{
+  "ver_planes": {
+    "es": "Ver planes",
+    "en": "View plans"
+  },
+  "contacto": {
+    "es": "Contacto",
+    "en": "Contact"
+  },
+  "nosotros": {
+    "es": "Nosotros",
+    "en": "About us"
+  },
+  "inicio": {
+    "es": "Inicio",
+    "en": "Home"
+  },
+  "leer_mas": {
+    "es": "Leer más",
+    "en": "Read more"
+  },
+  "enviar": {
+    "es": "Enviar",
+    "en": "Submit"
+  },
+  "nombre": {
+    "es": "Nombre",
+    "en": "Name"
+  },
+  "email": {
+    "es": "Email",
+    "en": "Email"
+  },
+  "mensaje": {
+    "es": "Mensaje",
+    "en": "Message"
+  },
+  "telefono": {
+    "es": "Teléfono",
+    "en": "Phone"
+  },
+  "buscar": {
+    "es": "Buscar",
+    "en": "Search"
+  },
+  "menu": {
+    "es": "Menú",
+    "en": "Menu"
+  },
+  "cerrar": {
+    "es": "Cerrar",
+    "en": "Close"
+  },
+  "siguiente": {
+    "es": "Siguiente",
+    "en": "Next"
+  },
+  "anterior": {
+    "es": "Anterior",
+    "en": "Previous"
+  }
+}
