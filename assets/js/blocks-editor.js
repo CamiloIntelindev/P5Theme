@@ -8,7 +8,7 @@
 (function(wp) {
   const { registerBlockType } = wp.blocks;
   const { InspectorControls } = wp.blockEditor || wp.editor;
-  const { PanelBody, RangeControl, ToggleControl, SelectControl, CheckboxControl } = wp.components;
+  const { PanelBody, RangeControl, ToggleControl, SelectControl, CheckboxControl, TextControl, ColorPicker } = wp.components;
   const { __ } = wp.i18n;
   const { createElement: el, Fragment } = wp.element;
   const { ServerSideRender } = wp;
@@ -91,6 +91,156 @@
             })
           ),
           
+          // Panel: Tipografía
+          el(
+            PanelBody,
+            {
+              title: __('Tipografía', 'p5marketing'),
+              initialOpen: false,
+            },
+            el('div', { style: { marginBottom: '12px' } },
+              el('strong', {}, __('Título', 'p5marketing'))
+            ),
+            el(TextControl, {
+              label: __('Familia de fuente (CSS)', 'p5marketing'),
+              value: attributes.titleFontFamily || '',
+              onChange: (value) => setAttributes({ titleFontFamily: value }),
+              help: __('Ej: Inter, \'Helvetica Neue\', Arial, sans-serif', 'p5marketing'),
+            }),
+            el(TextControl, {
+              label: __('Tamaño de fuente (CSS)', 'p5marketing'),
+              value: attributes.titleFontSize || '',
+              onChange: (value) => setAttributes({ titleFontSize: value }),
+              help: __('Ej: 20px, 1.25rem', 'p5marketing'),
+            }),
+            el(TextControl, {
+              label: __('Peso de fuente (opcional)', 'p5marketing'),
+              value: attributes.titleWeight || '',
+              onChange: (value) => setAttributes({ titleWeight: value }),
+              help: __('Ej: 400, 600, 700 o bold', 'p5marketing'),
+            }),
+            el('div', { style: { marginTop: '8px' } },
+              el('label', { className: 'components-base-control__label' }, __('Color del título', 'p5marketing')),
+              el(ColorPicker, {
+                color: attributes.titleColor || '',
+                onChangeComplete: (value) => setAttributes({ titleColor: value.hex || value }),
+                disableAlpha: true,
+              })
+            ),
+            el('hr', {}),
+            el('div', { style: { marginBottom: '12px' } },
+              el('strong', {}, __('Texto/Extracto', 'p5marketing'))
+            ),
+            el(TextControl, {
+              label: __('Familia de fuente (CSS)', 'p5marketing'),
+              value: attributes.textFontFamily || '',
+              onChange: (value) => setAttributes({ textFontFamily: value }),
+            }),
+            el(TextControl, {
+              label: __('Tamaño de fuente (CSS)', 'p5marketing'),
+              value: attributes.textFontSize || '',
+              onChange: (value) => setAttributes({ textFontSize: value }),
+            }),
+            el('div', { style: { marginTop: '8px' } },
+              el('label', { className: 'components-base-control__label' }, __('Color del texto', 'p5marketing')),
+              el(ColorPicker, {
+                color: attributes.textColor || '',
+                onChangeComplete: (value) => setAttributes({ textColor: value.hex || value }),
+                disableAlpha: true,
+              })
+            )
+          ),
+
+          // Panel: Botón "Leer más"
+          el(
+            PanelBody,
+            {
+              title: __('Botón "Leer más"', 'p5marketing'),
+              initialOpen: false,
+            },
+            el(TextControl, {
+              label: __('Texto del botón', 'p5marketing'),
+              value: attributes.readMoreText || 'Leer más',
+              onChange: (value) => setAttributes({ readMoreText: value }),
+            }),
+            el('div', { style: { marginTop: '8px' } },
+              el('label', { className: 'components-base-control__label' }, __('Color de fondo', 'p5marketing')),
+              el(ColorPicker, {
+                color: attributes.buttonBgColor || '',
+                onChangeComplete: (value) => setAttributes({ buttonBgColor: value.hex || value }),
+                disableAlpha: false,
+              })
+            ),
+            el('div', { style: { marginTop: '8px' } },
+              el('label', { className: 'components-base-control__label' }, __('Color de texto', 'p5marketing')),
+              el(ColorPicker, {
+                color: attributes.buttonTextColor || '',
+                onChangeComplete: (value) => setAttributes({ buttonTextColor: value.hex || value }),
+                disableAlpha: false,
+              })
+            ),
+            el(TextControl, {
+              label: __('Familia de fuente (CSS)', 'p5marketing'),
+              value: attributes.buttonFontFamily || '',
+              onChange: (value) => setAttributes({ buttonFontFamily: value }),
+            }),
+            el(TextControl, {
+              label: __('Tamaño de fuente (CSS)', 'p5marketing'),
+              value: attributes.buttonFontSize || '',
+              onChange: (value) => setAttributes({ buttonFontSize: value }),
+            }),
+            el(TextControl, {
+              label: __('Padding (CSS)', 'p5marketing'),
+              value: attributes.buttonPadding || '',
+              onChange: (value) => setAttributes({ buttonPadding: value }),
+              help: __('Ej: 10px 16px', 'p5marketing'),
+            }),
+            el(TextControl, {
+              label: __('Ancho (CSS o "full"/"auto")', 'p5marketing'),
+              value: attributes.buttonWidth || 'auto',
+              onChange: (value) => setAttributes({ buttonWidth: value }),
+              help: __('Ej: 200px, 100%, full, auto', 'p5marketing'),
+            }),
+            el(SelectControl, {
+              label: __('Alineación', 'p5marketing'),
+              value: attributes.buttonAlign || 'left',
+              options: [
+                { label: __('Izquierda', 'p5marketing'), value: 'left' },
+                { label: __('Centro', 'p5marketing'), value: 'center' },
+                { label: __('Derecha', 'p5marketing'), value: 'right' },
+              ],
+              onChange: (value) => setAttributes({ buttonAlign: value }),
+            }),
+            el(TextControl, {
+              label: __('Borde (CSS)', 'p5marketing'),
+              value: attributes.buttonBorder || '',
+              onChange: (value) => setAttributes({ buttonBorder: value }),
+              help: __('Ej: 1px solid #000', 'p5marketing'),
+            }),
+            el(TextControl, {
+              label: __('Radio de borde (CSS)', 'p5marketing'),
+              value: attributes.buttonRadius || '',
+              onChange: (value) => setAttributes({ buttonRadius: value }),
+              help: __('Ej: 6px', 'p5marketing'),
+            }),
+            el('div', { style: { marginTop: '8px' } },
+              el('label', { className: 'components-base-control__label' }, __('Color fondo hover', 'p5marketing')),
+              el(ColorPicker, {
+                color: attributes.buttonHoverBgColor || '',
+                onChangeComplete: (value) => setAttributes({ buttonHoverBgColor: value.hex || value }),
+                disableAlpha: false,
+              })
+            ),
+            el('div', { style: { marginTop: '8px' } },
+              el('label', { className: 'components-base-control__label' }, __('Color texto hover', 'p5marketing')),
+              el(ColorPicker, {
+                color: attributes.buttonHoverTextColor || '',
+                onChangeComplete: (value) => setAttributes({ buttonHoverTextColor: value.hex || value }),
+                disableAlpha: false,
+              })
+            )
+          ),
+
           // Panel: Post Types
           el(
             PanelBody,
