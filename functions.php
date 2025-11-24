@@ -77,6 +77,11 @@ if (file_exists(get_template_directory() . '/inc/shortcodes-help.php')) {
   require_once get_template_directory() . '/inc/shortcodes-help.php';
 }
 
+// Custom Gutenberg Blocks
+if (file_exists(get_template_directory() . '/inc/blocks-loader.php')) {
+  require_once get_template_directory() . '/inc/blocks-loader.php';
+}
+
 
 // Permitir subida de SVG
 function allow_svg_upload($mimes) {
