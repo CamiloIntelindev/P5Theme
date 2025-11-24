@@ -79,6 +79,17 @@ add_action('admin_init', function() {
   }, 'p5m-settings');
   
   add_settings_field('p5m_immediate_footer', __('Footer Scripts (Inmediatos)', 'p5marketing'), 'p5m_field_immediate_footer_cb', 'p5m-settings', 'p5m_immediate_section');
+
+  // Image Optimization Section
+  add_settings_section('p5m_image_optimization_section', __('Optimización de Imágenes', 'p5marketing'), function(){ 
+    echo '<p>' . __('Configura cómo se optimizan las imágenes para mejorar LCP y tiempos de carga. PageSpeed Insights recomienda optimizar imágenes específicas.', 'p5marketing') . '</p>'; 
+  }, 'p5m-settings');
+  
+  add_settings_field('p5m_image_quality', __('Calidad de compresión JPEG/WebP (%)', 'p5marketing'), 'p5m_field_image_quality_cb', 'p5m-settings', 'p5m_image_optimization_section');
+  add_settings_field('p5m_enable_webp', __('Convertir a WebP automáticamente', 'p5marketing'), 'p5m_field_enable_webp_cb', 'p5m-settings', 'p5m_image_optimization_section');
+  add_settings_field('p5m_critical_images', __('URLs de imágenes críticas (eager loading)', 'p5marketing'), 'p5m_field_critical_images_cb', 'p5m-settings', 'p5m_image_optimization_section');
+  add_settings_field('p5m_optimize_images_list', __('URLs específicas para optimizar (de PageSpeed)', 'p5marketing'), 'p5m_field_optimize_images_list_cb', 'p5m-settings', 'p5m_image_optimization_section');
+  add_settings_field('p5m_max_image_width', __('Ancho máximo de imágenes (px)', 'p5marketing'), 'p5m_field_max_image_width_cb', 'p5m-settings', 'p5m_image_optimization_section');
 });
 
 /* Callbacks for fields */
@@ -204,6 +215,41 @@ function p5m_field_immediate_footer_cb() {
   echo '<p class="description">' . __('Scripts que se cargan <strong>inmediatamente</strong> antes de &lt;/body&gt;. Úsalo para cookie banners o scripts críticos. <strong>NO diferido.</strong>', 'p5marketing') . '</p>';
 }
 
+function p5m_field_image_quality_cb() {
+  $opts = get_option('p5m_settings', []);
+  $val = intval($opts['image_quality'] ?? 82);
+  echo '<input id="p5m_image_quality" name="p5m_settings[image_quality]" type="number" min="60" max="100" value="'. $val .'" class="small-text" />';
+  echo '<p class="description">' . __('Calidad de compresión para JPEG/WebP (60-100). Por defecto: 82. Menor = archivos más pequeños.', 'p5marketing') . '</p>';
+}
+
+function p5m_field_enable_webp_cb() {
+  $opts = get_option('p5m_settings', []);
+  $checked = isset($opts['enable_webp']) ? intval($opts['enable_webp']) : 1;
+  echo '<label><input type="checkbox" id="p5m_enable_webp" name="p5m_settings[enable_webp]" value="1" ' . checked($checked, 1, false) . ' /> ';
+  echo __('Generar versiones WebP automáticamente al subir imágenes (reduce peso 25-35%)', 'p5marketing') . '</label>';
+}
+
+function p5m_field_critical_images_cb() {
+  $opts = get_option('p5m_settings', []);
+  $val = esc_textarea($opts['critical_images'] ?? '');
+  echo '<textarea id="p5m_critical_images" name="p5m_settings[critical_images]" rows="6" cols="50" class="large-text code" spellcheck="false" placeholder="https://ejemplo.com/wp-content/uploads/2024/hero-image.jpg&#10;/wp-content/uploads/logo.png">'. $val .'</textarea>';
+  echo '<p class="description">' . __('URLs de imágenes críticas (una por línea). Estas se cargarán con loading="eager" y fetchpriority="high" para mejorar LCP. Ejemplos: hero images, logos principales.', 'p5marketing') . '</p>';
+}
+
+function p5m_field_optimize_images_list_cb() {
+  $opts = get_option('p5m_settings', []);
+  $val = esc_textarea($opts['optimize_images_list'] ?? '');
+  echo '<textarea id="p5m_optimize_images_list" name="p5m_settings[optimize_images_list]" rows="10" cols="50" class="large-text code" spellcheck="false" placeholder="https://ejemplo.com/wp-content/uploads/2024/imagen-pesada.jpg&#10;/wp-content/uploads/banner.png">'. $val .'</textarea>';
+  echo '<p class="description">' . __('Pega aquí las URLs de imágenes que PageSpeed Insights recomienda optimizar (una por línea). El tema intentará comprimirlas y convertirlas a WebP automáticamente.', 'p5marketing') . '</p>';
+}
+
+function p5m_field_max_image_width_cb() {
+  $opts = get_option('p5m_settings', []);
+  $val = intval($opts['max_image_width'] ?? 2560);
+  echo '<input id="p5m_max_image_width" name="p5m_settings[max_image_width]" type="number" min="1200" max="4000" step="100" value="'. $val .'" class="small-text" />';
+  echo '<p class="description">' . __('Ancho máximo en píxeles para imágenes subidas. Las imágenes más grandes se redimensionarán automáticamente. Por defecto: 2560px.', 'p5marketing') . '</p>';
+}
+
 /* Sanitization */
 function p5m_settings_sanitize($input) {
     $opts = get_option('p5m_settings', []);
@@ -270,6 +316,24 @@ function p5m_settings_sanitize($input) {
   }
   if (isset($input['immediate_footer'])) {
     $out['immediate_footer'] = trim($input['immediate_footer']);
+  }
+
+  // Image optimization settings
+  if (isset($input['image_quality'])) {
+    $quality = intval($input['image_quality']);
+    $out['image_quality'] = max(60, min(100, $quality)); // Clamp between 60-100
+  }
+  $out['enable_webp'] = !empty($input['enable_webp']) ? 1 : 0;
+  
+  if (isset($input['critical_images'])) {
+    $out['critical_images'] = sanitize_textarea_field($input['critical_images']);
+  }
+  if (isset($input['optimize_images_list'])) {
+    $out['optimize_images_list'] = sanitize_textarea_field($input['optimize_images_list']);
+  }
+  if (isset($input['max_image_width'])) {
+    $width = intval($input['max_image_width']);
+    $out['max_image_width'] = max(1200, min(4000, $width)); // Clamp between 1200-4000
   }
 
   // Content behavior booleans
