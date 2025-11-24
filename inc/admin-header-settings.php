@@ -109,25 +109,13 @@ add_action('admin_init', function() {
   add_settings_field('p5m_header_scrolled_cta_bg', __('CTA BG al hacer scroll', 'p5marketing'), 'p5m_field_header_color_cb', 'p5m-header-settings', 'p5m_header_style_section', ['key' => 'scrolled_cta_bg', 'placeholder' => '#4f46e5']);
   add_settings_field('p5m_header_scrolled_cta_text', __('CTA texto al hacer scroll', 'p5marketing'), 'p5m_field_header_color_cb', 'p5m-header-settings', 'p5m_header_style_section', ['key' => 'scrolled_cta_text', 'placeholder' => '#ffffff']);
   
-  // Sección de Grillas Personalizables
+  // Sección de Grillas Personalizables (se renderiza con tabla personalizada)
   add_settings_section(
     'p5m_header_grids_section',
     __('Grillas personalizables', 'p5marketing'),
-    function(){
-      echo '<p>' . esc_html__('Añade contenido personalizado (shortcodes, banners, botones) arriba y debajo del header principal.', 'p5marketing') . '</p>';
-    },
+    'p5m_header_grids_section_cb',
     'p5m-header-settings'
   );
-  
-  // Grilla superior (3 columnas)
-  add_settings_field('p5m_header_top_col1', __('Grilla Superior - Columna 1', 'p5marketing'), 'p5m_field_header_grid_cb', 'p5m-header-settings', 'p5m_header_grids_section', ['key' => 'top_col1']);
-  add_settings_field('p5m_header_top_col2', __('Grilla Superior - Columna 2', 'p5marketing'), 'p5m_field_header_grid_cb', 'p5m-header-settings', 'p5m_header_grids_section', ['key' => 'top_col2']);
-  add_settings_field('p5m_header_top_col3', __('Grilla Superior - Columna 3', 'p5marketing'), 'p5m_field_header_grid_cb', 'p5m-header-settings', 'p5m_header_grids_section', ['key' => 'top_col3']);
-  
-  // Grilla inferior (3 columnas)
-  add_settings_field('p5m_header_bottom_col1', __('Grilla Inferior - Columna 1', 'p5marketing'), 'p5m_field_header_grid_cb', 'p5m-header-settings', 'p5m_header_grids_section', ['key' => 'bottom_col1']);
-  add_settings_field('p5m_header_bottom_col2', __('Grilla Inferior - Columna 2', 'p5marketing'), 'p5m_field_header_grid_cb', 'p5m-header-settings', 'p5m_header_grids_section', ['key' => 'bottom_col2']);
-  add_settings_field('p5m_header_bottom_col3', __('Grilla Inferior - Columna 3', 'p5marketing'), 'p5m_field_header_grid_cb', 'p5m-header-settings', 'p5m_header_grids_section', ['key' => 'bottom_col3']);
 });
 
 /* Field Callbacks */
@@ -510,6 +498,80 @@ function p5m_field_header_grid_cb($args) {
   echo esc_textarea($val);
   echo '</textarea>';
   echo '<p class="description">' . __('Puedes usar HTML, shortcodes, o dejar vacío. Soporta do_shortcode().', 'p5marketing') . '</p>';
+}
+
+// Callback para renderizar la sección de grillas como tabla
+function p5m_header_grids_section_cb() {
+  $opts = get_option('p5m_header_settings', []);
+  ?>
+  <p><?php esc_html_e('Añade contenido personalizado (shortcodes, banners, botones) arriba y debajo del header principal.', 'p5marketing'); ?></p>
+  <p class="description" style="background: #fff3cd; padding: 10px; border-left: 4px solid #ffc107; margin-bottom: 20px;">
+    <strong>💡 Tip:</strong> Puedes usar shortcodes para contenido dinámico. Ejemplos: 
+    <code>[current_year]</code>, <code>[site_name]</code>, <code>[nav_menu location="menu"]</code>
+    <br>
+    <a href="<?php echo esc_url(admin_url('themes.php?page=p5m-shortcodes-help')); ?>" style="margin-top: 5px; display: inline-block;">Ver lista completa de shortcodes disponibles →</a>
+  </p>
+  
+  <h3 style="margin-top: 24px; margin-bottom: 12px;">📍 Grilla Superior (antes del header)</h3>
+  <table class="p5m-header-grid-top" style="width:100%; border-collapse: collapse; margin: 20px 0;">
+    <tr>
+      <?php for ($col = 1; $col <= 3; $col++): 
+        $key = "top_col{$col}";
+        $val = isset($opts[$key]) ? $opts[$key] : '';
+      ?>
+      <td style="border: 1px solid #ddd; padding: 12px; width: 33.33%; vertical-align: top; background: #f9f9f9;">
+        <label style="display: block; font-weight: 600; margin-bottom: 8px;">
+          <?php printf(__('Columna %d', 'p5marketing'), $col); ?>
+        </label>
+        <textarea 
+          name="p5m_header_settings[<?php echo esc_attr($key); ?>]" 
+          rows="6" 
+          style="width: 100%; font-family: monospace; font-size: 12px; padding: 8px; border: 1px solid #ccc; border-radius: 3px;"
+          spellcheck="false"
+        ><?php echo esc_textarea($val); ?></textarea>
+        <p class="description" style="margin-top: 6px; font-size: 11px; color: #666;">
+          <?php esc_html_e('HTML y shortcodes permitidos', 'p5marketing'); ?>
+        </p>
+      </td>
+      <?php endfor; ?>
+    </tr>
+  </table>
+  
+  <h3 style="margin-top: 32px; margin-bottom: 12px;">📍 Grilla Inferior (después del header)</h3>
+  <table class="p5m-header-grid-bottom" style="width:100%; border-collapse: collapse; margin: 20px 0;">
+    <tr>
+      <?php for ($col = 1; $col <= 3; $col++): 
+        $key = "bottom_col{$col}";
+        $val = isset($opts[$key]) ? $opts[$key] : '';
+      ?>
+      <td style="border: 1px solid #ddd; padding: 12px; width: 33.33%; vertical-align: top; background: #fff;">
+        <label style="display: block; font-weight: 600; margin-bottom: 8px;">
+          <?php printf(__('Columna %d', 'p5marketing'), $col); ?>
+        </label>
+        <textarea 
+          name="p5m_header_settings[<?php echo esc_attr($key); ?>]" 
+          rows="6" 
+          style="width: 100%; font-family: monospace; font-size: 12px; padding: 8px; border: 1px solid #ccc; border-radius: 3px;"
+          spellcheck="false"
+        ><?php echo esc_textarea($val); ?></textarea>
+        <p class="description" style="margin-top: 6px; font-size: 11px; color: #666;">
+          <?php esc_html_e('HTML y shortcodes permitidos', 'p5marketing'); ?>
+        </p>
+      </td>
+      <?php endfor; ?>
+    </tr>
+  </table>
+  
+  <div style="background: #e7f3ff; padding: 12px; border-left: 4px solid #2196F3; margin-top: 20px;">
+    <strong>ℹ️ Estructura:</strong>
+    <ul style="margin: 8px 0 0 20px;">
+      <li><strong>Grilla Superior:</strong> Aparece ANTES del header (útil para anuncios, banners promocionales)</li>
+      <li><strong>Grilla Inferior:</strong> Aparece DESPUÉS del header (útil para menús secundarios, breadcrumbs)</li>
+      <li>Cada grilla tiene <strong>3 columnas</strong> en desktop, colapsan a 1 columna en móvil</li>
+      <li>Las grillas solo se muestran si tienen contenido (altura 0 por defecto)</li>
+    </ul>
+  </div>
+  <?php
 }
 
 /* Helper to read header settings easily */
