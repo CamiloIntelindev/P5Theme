@@ -150,6 +150,35 @@ function p5m_field_header_menu_cb() {
   }
   echo '</select>';
   echo '<p class="description">' . __('Selecciona qué menú se mostrará en el header.', 'p5marketing') . '</p>';
+
+  // Visual validation: location vs slug + assignment details
+  $registered_locations = array_keys(get_registered_nav_menus());
+  $is_location = in_array($selected, $registered_locations, true);
+  echo '<div class="notice inline" style="margin-top:8px; padding:10px; background:#f8fafc; border:1px solid #e5e7eb; border-radius:4px;">';
+  if ($is_location) {
+    echo '<p style="margin:0 0 6px 0;"><strong>' . esc_html__('Tipo:', 'p5marketing') . '</strong> ' . esc_html__('Ubicación de tema (theme location)', 'p5marketing') . ' <code>' . esc_html($selected) . '</code></p>';
+    $locations = get_nav_menu_locations();
+    $menu_id = isset($locations[$selected]) ? intval($locations[$selected]) : 0;
+    if ($menu_id) {
+      $menu_obj = wp_get_nav_menu_object($menu_id);
+      $items = wp_get_nav_menu_items($menu_id);
+      $count = is_array($items) ? count($items) : 0;
+      echo '<p style="margin:0;"><strong>' . esc_html__('Asignado a:', 'p5marketing') . '</strong> ' . esc_html($menu_obj ? $menu_obj->name : '') . ' (' . sprintf(esc_html__('%d ítems', 'p5marketing'), $count) . ')</p>';
+    } else {
+      echo '<p style="margin:0;">' . esc_html__('Esta ubicación no tiene un menú asignado actualmente.', 'p5marketing') . ' <a href="' . esc_url(admin_url('nav-menus.php')) . '" target="_blank">' . esc_html__('Asignar menú →', 'p5marketing') . '</a></p>';
+    }
+  } else {
+    echo '<p style="margin:0 0 6px 0;"><strong>' . esc_html__('Tipo:', 'p5marketing') . '</strong> ' . esc_html__('Menú por slug', 'p5marketing') . ' <code>' . esc_html($selected) . '</code></p>';
+    $menu_obj = get_term_by('slug', $selected, 'nav_menu');
+    if ($menu_obj && !is_wp_error($menu_obj)) {
+      $items = wp_get_nav_menu_items($menu_obj->term_id);
+      $count = is_array($items) ? count($items) : 0;
+      echo '<p style="margin:0;"><strong>' . esc_html__('Etiqueta:', 'p5marketing') . '</strong> ' . esc_html($menu_obj->name) . ' (' . sprintf(esc_html__('%d ítems', 'p5marketing'), $count) . ')</p>';
+    } else {
+      echo '<p style="margin:0;">' . esc_html__('No se encontró un menú con este slug.', 'p5marketing') . ' <a href="' . esc_url(admin_url('nav-menus.php')) . '" target="_blank">' . esc_html__('Crear/editar menús →', 'p5marketing') . '</a></p>';
+    }
+  }
+  echo '</div>';
 }
 
 function p5m_field_header_menu_display_cb() {

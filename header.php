@@ -321,12 +321,19 @@ $has_bottom_grid = !empty($bottom_col1) || !empty($bottom_col2) || !empty($botto
 			<div class="p5-header-nav <?php echo $menu_display === 'full' ? 'hidden lg:flex' : 'hidden'; ?> flex-1 justify-center">
 				<nav class="nav-menu-desktop">
 					<?php
-					wp_nav_menu([
-						 'theme_location' => $header_menu,
-						  'container'      => false,
-						  'menu_class'     => 'flex items-center gap-8',
-						  'fallback_cb'    => false,
-					]);
+					// Construir args del menú: soporta location (ej: 'primary') o slug de menú
+					$registered_locations = function_exists('get_registered_nav_menus') ? array_keys(get_registered_nav_menus()) : [];
+					$nav_args = [
+						'container'   => false,
+						'menu_class'  => 'flex items-center gap-8',
+						'fallback_cb' => false,
+					];
+					if (in_array($header_menu, $registered_locations, true)) {
+						$nav_args['theme_location'] = $header_menu; // location registrado
+					} else {
+						$nav_args['menu'] = $header_menu; // slug de menú seleccionado en ajustes
+					}
+					wp_nav_menu($nav_args);
 					?>
 				</nav>
 			</div>
@@ -370,13 +377,19 @@ $has_bottom_grid = !empty($bottom_col1) || !empty($bottom_col2) || !empty($botto
 			x-transition:leave-end="opacity-0 -translate-y-2"
 		>
 			<?php
-			// Menú Principal Móvil
-			wp_nav_menu([
-				'theme_location' => $header_menu,
-				'container'      => false,
-				'menu_class'     => 'flex flex-col gap-3 pt-3 pb-4',
-				'fallback_cb'    => false,
-			]);
+			// Menú Principal Móvil: soporta location o slug
+			$registered_locations = function_exists('get_registered_nav_menus') ? array_keys(get_registered_nav_menus()) : [];
+			$mobile_nav_args = [
+				'container'   => false,
+				'menu_class'  => 'flex flex-col gap-3 pt-3 pb-4',
+				'fallback_cb' => false,
+			];
+			if (in_array($header_menu, $registered_locations, true)) {
+				$mobile_nav_args['theme_location'] = $header_menu;
+			} else {
+				$mobile_nav_args['menu'] = $header_menu;
+			}
+			wp_nav_menu($mobile_nav_args);
 			?>
 		</div>
 	</div>
