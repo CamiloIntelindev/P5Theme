@@ -275,7 +275,8 @@ function p5m_render_posts_grid_block($attributes) {
       $btn_styles[] = 'text-align:center';
     } elseif ($btn_width !== 'auto') {
       $btn_styles[] = 'width:' . $btn_width;
-      $btn_styles[] = 'display:inline-block';
+      $btn_styles[] = 'display:inline-flex';
+      $btn_styles[] = 'justify-content: center';
     }
   }
   $btn_style_attr = $btn_styles ? ' style="' . esc_attr(implode(';', $btn_styles)) . '"' : '';

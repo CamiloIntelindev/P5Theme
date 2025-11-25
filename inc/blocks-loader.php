@@ -17,6 +17,7 @@ function p5m_load_custom_blocks() {
   // Lista de bloques a cargar
   $blocks = [
     'posts-grid.php',
+    'posts-carousel.php',
     // Aquí agregaremos más bloques en el futuro
     // 'testimonials.php',
     // 'cta-banner.php',
@@ -42,6 +43,7 @@ function p5m_register_all_blocks() {
   
   // Registrar cada bloque
   p5m_register_posts_grid_block();
+  p5m_register_posts_carousel_block();
   
   // Aquí agregaremos el registro de más bloques
   // p5m_register_testimonials_block();
@@ -72,6 +74,23 @@ function p5m_enqueue_block_editor_assets() {
   }
 }
 add_action('enqueue_block_editor_assets', 'p5m_enqueue_block_editor_assets');
+
+/**
+ * Frontend + editor shared assets for blocks
+ */
+function p5m_enqueue_blocks_frontend_assets() {
+  $carousel_js = get_template_directory() . '/assets/js/posts-carousel.js';
+  if (file_exists($carousel_js)) {
+    wp_register_script(
+      'p5m-posts-carousel',
+      get_template_directory_uri() . '/assets/js/posts-carousel.js',
+      [],
+      filemtime($carousel_js),
+      true
+    );
+  }
+}
+add_action('enqueue_block_assets', 'p5m_enqueue_blocks_frontend_assets');
 
 /**
  * Get available post types for block settings

@@ -381,4 +381,201 @@
     },
   });
 
+  /**
+   * Posts Carousel Block
+   */
+  registerBlockType('p5m/posts-carousel', {
+    title: __('Carrusel de Posts', 'p5marketing'),
+    description: __('Carrusel con imagen destacada como fondo y título superpuesto', 'p5marketing'),
+    icon: 'images-alt2',
+    category: 'p5m-blocks',
+    keywords: [__('posts', 'p5marketing'), __('carousel', 'p5marketing'), __('marquesina', 'p5marketing')],
+
+    edit: function(props) {
+      const { attributes, setAttributes } = props;
+
+      const postTypeOptions = window.p5mBlocksData && window.p5mBlocksData.postTypes 
+        ? window.p5mBlocksData.postTypes 
+        : [{label: 'Posts', value: 'post'}];
+
+      const imageSizeOptions = window.p5mBlocksData && window.p5mBlocksData.imageSizes
+        ? window.p5mBlocksData.imageSizes
+        : [
+            {label: 'Thumbnail', value: 'thumbnail'},
+            {label: 'Medium', value: 'medium'},
+            {label: 'Large', value: 'large'},
+            {label: 'Full', value: 'full'},
+          ];
+
+      return el(
+        Fragment,
+        {},
+        el(
+          InspectorControls,
+          {},
+          el(
+            PanelBody,
+            { title: __('Contenido', 'p5marketing'), initialOpen: true },
+            el('p', { className: 'components-base-control__help' }, __('Selecciona tipos de post y cantidad:', 'p5marketing')),
+            postTypeOptions.map(function(postType) {
+              const isChecked = attributes.postTypes && attributes.postTypes.indexOf(postType.value) !== -1;
+              return el(CheckboxControl, {
+                label: postType.label,
+                checked: isChecked,
+                onChange: function(checked) {
+                  let newPostTypes = attributes.postTypes ? [...attributes.postTypes] : [];
+                  if (checked) {
+                    if (newPostTypes.indexOf(postType.value) === -1) newPostTypes.push(postType.value);
+                  } else {
+                    newPostTypes = newPostTypes.filter(function(type) { return type !== postType.value; });
+                  }
+                  setAttributes({ postTypes: newPostTypes });
+                },
+              });
+            }),
+            el(RangeControl, {
+              label: __('Posts a mostrar', 'p5marketing'),
+              value: attributes.postsPerPage || 6,
+              onChange: (value) => setAttributes({ postsPerPage: value }),
+              min: 1, max: 50,
+            }),
+            el(SelectControl, {
+              label: __('Tamaño de imagen', 'p5marketing'),
+              value: attributes.imageSize || 'large',
+              options: imageSizeOptions,
+              onChange: (value) => setAttributes({ imageSize: value }),
+            })
+          ),
+
+          el(
+            PanelBody,
+            { title: __('Layout', 'p5marketing'), initialOpen: false },
+            el(RangeControl, {
+              label: __('Slides Desktop', 'p5marketing'),
+              value: attributes.slidesDesktop || 3,
+              onChange: (value) => setAttributes({ slidesDesktop: value }),
+              min: 1, max: 6,
+            }),
+            el(RangeControl, {
+              label: __('Slides Tablet', 'p5marketing'),
+              value: attributes.slidesTablet || 2,
+              onChange: (value) => setAttributes({ slidesTablet: value }),
+              min: 1, max: 6,
+            }),
+            el(RangeControl, {
+              label: __('Slides Mobile', 'p5marketing'),
+              value: attributes.slidesMobile || 1,
+              onChange: (value) => setAttributes({ slidesMobile: value }),
+              min: 1, max: 3,
+            }),
+            el(SelectControl, {
+              label: __('Espaciado', 'p5marketing'),
+              value: attributes.gapSize || 'medium',
+              options: [
+                { label: __('Sin espacio', 'p5marketing'), value: 'none' },
+                { label: __('Pequeño', 'p5marketing'), value: 'small' },
+                { label: __('Mediano', 'p5marketing'), value: 'medium' },
+                { label: __('Grande', 'p5marketing'), value: 'large' },
+              ],
+              onChange: (value) => setAttributes({ gapSize: value }),
+            }),
+            el(TextControl, {
+              label: __('Tamaño mínimo de tarjeta', 'p5marketing'),
+              value: attributes.minSize || '300px',
+              onChange: (value) => setAttributes({ minSize: value }),
+              help: __('Ej: 300px', 'p5marketing'),
+            })
+          ),
+
+          el(
+            PanelBody,
+            { title: __('Comportamiento', 'p5marketing'), initialOpen: false },
+            el(ToggleControl, {
+              label: __('Marquesina infinita (continuous)', 'p5marketing'),
+              checked: !!attributes.marquee,
+              onChange: (value) => setAttributes({ marquee: value }),
+            }),
+            !attributes.marquee && el(ToggleControl, {
+              label: __('Autoplay', 'p5marketing'),
+              checked: attributes.autoplay !== false,
+              onChange: (value) => setAttributes({ autoplay: value }),
+            }),
+            !attributes.marquee && el(RangeControl, {
+              label: __('Tiempo entre transiciones (ms)', 'p5marketing'),
+              value: attributes.autoplayDelay || 3000,
+              onChange: (value) => setAttributes({ autoplayDelay: value }),
+              min: 1000, max: 10000, step: 100,
+            }),
+            !attributes.marquee && el(RangeControl, {
+              label: __('Velocidad de transición (ms)', 'p5marketing'),
+              value: attributes.transitionSpeed || 400,
+              onChange: (value) => setAttributes({ transitionSpeed: value }),
+              min: 100, max: 2000, step: 50,
+            }),
+            !attributes.marquee && el(ToggleControl, {
+              label: __('Loop infinito', 'p5marketing'),
+              checked: attributes.infinite !== false,
+              onChange: (value) => setAttributes({ infinite: value }),
+            }),
+            attributes.marquee && el(RangeControl, {
+              label: __('Velocidad marquesina (px/s)', 'p5marketing'),
+              value: attributes.marqueeSpeed || 60,
+              onChange: (value) => setAttributes({ marqueeSpeed: value }),
+              min: 20, max: 300, step: 5,
+            }),
+            attributes.marquee && el(ToggleControl, {
+              label: __('Pausar al pasar el mouse', 'p5marketing'),
+              checked: attributes.marqueePauseOnHover !== false,
+              onChange: (value) => setAttributes({ marqueePauseOnHover: value }),
+            }),
+            !attributes.marquee && el(ToggleControl, {
+              label: __('Mostrar flechas', 'p5marketing'),
+              checked: attributes.showArrows !== false,
+              onChange: (value) => setAttributes({ showArrows: value }),
+            }),
+            !attributes.marquee && el(ToggleControl, {
+              label: __('Mostrar puntos', 'p5marketing'),
+              checked: !!attributes.showDots,
+              onChange: (value) => setAttributes({ showDots: value }),
+            })
+          ),
+
+          el(
+            PanelBody,
+            { title: __('Estilos del título', 'p5marketing'), initialOpen: false },
+            el('div', { style: { marginTop: '8px' } },
+              el('label', { className: 'components-base-control__label' }, __('Color del texto', 'p5marketing')),
+              el(ColorPicker, {
+                color: attributes.titleColor || '#ffffff',
+                onChangeComplete: (value) => setAttributes({ titleColor: value.hex || value }),
+                disableAlpha: false,
+              })
+            ),
+            el('div', { style: { marginTop: '8px' } },
+              el('label', { className: 'components-base-control__label' }, __('Background del overlay', 'p5marketing')),
+              el(ColorPicker, {
+                color: attributes.titleBg || 'rgba(0,0,0,0.45)',
+                onChangeComplete: (value) => setAttributes({ titleBg: value.hex || value }),
+                disableAlpha: false,
+              })
+            ),
+            el(TextControl, {
+              label: __('Padding overlay', 'p5marketing'),
+              value: attributes.overlayPadding || '0.75rem 1rem',
+              onChange: (value) => setAttributes({ overlayPadding: value }),
+            })
+          )
+        ),
+
+        el('div', { className: 'p5m-block-preview' },
+          el(wp.serverSideRender || wp.components.ServerSideRender, {
+            block: 'p5m/posts-carousel',
+            attributes: attributes,
+          })
+        )
+      );
+    },
+    save: function(){ return null; }
+  });
+
 })(window.wp);
