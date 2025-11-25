@@ -370,9 +370,13 @@ function p5m_header_settings_sanitize($input) {
     $dir = sanitize_text_field($input['gradient_direction']);
     $out['gradient_direction'] = in_array($dir, ['horizontal','vertical']) ? $dir : 'horizontal';
   }
-  // Logo width
-  if (isset($input["logo_width"]) && $input["logo_width"] !== "") {
-    $out["logo_width"] = sanitize_text_field($input["logo_width"]);
+  // Logo width (append px if only digits entered)
+  if (isset($input['logo_width']) && $input['logo_width'] !== '') {
+    $lw = trim($input['logo_width']);
+    if (preg_match('/^\d+$/', $lw)) {
+      $lw .= 'px';
+    }
+    $out['logo_width'] = sanitize_text_field($lw);
   }
   
   // Header min height
@@ -617,7 +621,7 @@ function p5m_field_header_logo_width_cb() {
   $opts = get_option('p5m_header_settings', []);
   $val = isset($opts['logo_width']) ? esc_attr($opts['logo_width']) : '';
   echo '<input type="text" name="p5m_header_settings[logo_width]" value="' . $val . '" class="small-text" placeholder="auto" />';
-  echo '<p class="description">' . __('Ancho del logo (ej: 180px, 12rem, 15%, auto). Deja vacío para altura fija (h-10).', 'p5marketing') . '</p>';
+  echo '<p class="description">' . __('Ancho del logo (ej: 180px, 12rem, 15%, auto). Si introduces solo números (ej: 180) se añadirá automáticamente "px". Deja vacío para altura fija (h-10).', 'p5marketing') . '</p>';
 }
 
 // Campo: altura mínima del header
