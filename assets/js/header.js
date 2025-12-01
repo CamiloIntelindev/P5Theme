@@ -11,47 +11,84 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Mobile submenu toggles: append a toggle button for menu items with children
-  var mobileNav = document.getElementById('mobile-nav');
-  if (mobileNav) {
-    var parentItems = mobileNav.querySelectorAll('li.menu-item-has-children, li.has-child');
+  // Universal submenu toggles: work on both desktop and mobile, all levels
+  function initSubmenuToggles(container) {
+    if (!container) return;
+    
+    // Find all menu items with children (support multiple class patterns)
+    var parentItems = container.querySelectorAll('li.menu-item-has-children, li.has-child, li.wp-block-navigation-item.has-child');
+    
     parentItems.forEach(function (li) {
-      // avoid duplicating button
+      // Avoid duplicating button
       if (li.querySelector('.submenu-toggle')) return;
 
       var link = li.querySelector('a');
       var toggle = document.createElement('button');
       toggle.type = 'button';
-      toggle.className = 'submenu-toggle ml-2 inline-flex items-center justify-center p-2';
+      toggle.className = 'submenu-toggle inline-flex items-center justify-center p-1';
       toggle.setAttribute('aria-expanded', 'false');
       toggle.setAttribute('aria-label', 'Toggle submenu');
-      // simple caret icon (SVG)
+      // Simple caret icon (SVG)
       toggle.innerHTML = '<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 8L10 12L14 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
       if (link) {
-        // Insert toggle INSIDE the link so clicks on the toggle don't trigger navigation
+        // Insert toggle INSIDE the link so clicks on toggle don't trigger navigation
         link.appendChild(toggle);
 
         // Ensure toggle clicks don't cause the link to navigate
         toggle.addEventListener('click', function (e) {
           e.preventDefault();
           e.stopPropagation();
+          
+          // Close other open siblings at same level
+          var siblings = li.parentElement.querySelectorAll(':scope > li.open');
+          siblings.forEach(function(sib) {
+            if (sib !== li) {
+              sib.classList.remove('open');
+              var sibToggle = sib.querySelector('.submenu-toggle');
+              if (sibToggle) sibToggle.setAttribute('aria-expanded', 'false');
+            }
+          });
+          
+          // Toggle current item
           li.classList.toggle('open');
           var expanded = li.classList.contains('open');
           toggle.setAttribute('aria-expanded', String(expanded));
         });
 
       } else {
-        // fallback: append to li and behave similarly
+        // Fallback: append to li and behave similarly
         li.appendChild(toggle);
         toggle.addEventListener('click', function (e) {
           e.preventDefault();
+          
+          var siblings = li.parentElement.querySelectorAll(':scope > li.open');
+          siblings.forEach(function(sib) {
+            if (sib !== li) {
+              sib.classList.remove('open');
+              var sibToggle = sib.querySelector('.submenu-toggle');
+              if (sibToggle) sibToggle.setAttribute('aria-expanded', 'false');
+            }
+          });
+          
           li.classList.toggle('open');
           var expanded = li.classList.contains('open');
           toggle.setAttribute('aria-expanded', String(expanded));
         });
       }
     });
+  }
+
+  // Initialize toggles for mobile menu
+  var mobileNav = document.getElementById('mobile-nav');
+  if (mobileNav) {
+    initSubmenuToggles(mobileNav);
+  }
+
+  // Initialize toggles for desktop menu
+  var desktopNav = document.querySelector('.nav-menu-desktop');
+  if (desktopNav) {
+    initSubmenuToggles(desktopNav);
   }
 
   // Header scroll threshold behavior con breakpoint mínimo

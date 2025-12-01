@@ -310,7 +310,7 @@ $has_bottom_grid = !empty($bottom_col1) || !empty($bottom_col2) || !empty($botto
 					<img src="<?php echo esc_url($logo_url); ?>"
 						 alt="<?php echo esc_attr($logo_alt); ?>"
 						 <?php if (!empty($logo_w) && !empty($logo_h)) : ?>
-							width="<?php echo (int)$logo_w; ?>" height="<?php echo (int)$logo_h; ?>"
+							width="<?php echo (int)$logo_w."px"; ?>" height="<?php echo (int)$logo_h."px"; ?>"
 						 <?php endif; ?>
 						 decoding="async"
 						 class="h-10 w-auto logo-responsive"<?php echo $logo_width_style; ?> />
