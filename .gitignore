@@ -1,0 +1,25 @@
+# Backup files
+*.bak
+*.bak[0-9]
+*.bak[0-9][0-9]
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node modules
+node_modules/
+
+# Build artifacts
+dist/*.map
+
+# Logs
+*.log
+npm-debug.log*
