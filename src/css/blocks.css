@@ -212,10 +212,17 @@
 
 /* Desktop submenu styles: keep collapsed by default, show on .open class */
 @media (min-width: 1024px) {
-  /* All submenus (any level) start hidden */
+  /* Parent items need relative positioning */
+  .nav-menu-desktop > ul > li,
+  .nav-menu-desktop .menu-item-has-children,
+  .nav-menu-desktop .has-child {
+    position: relative;
+  }
+
+  /* All submenus (any level) start hidden - use !important to override WP defaults */
   .nav-menu-desktop .sub-menu,
   .nav-menu-desktop .wp-block-navigation__submenu-container {
-    position: absolute;
+    position: absolute !important;
     left: 0;
     top: 100%;
     min-width: 200px;
@@ -225,14 +232,19 @@
     border-radius: 4px;
     padding: 0.5rem 0;
     margin-top: 0.5rem;
-    display: none;
+    display: none !important;
     z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
   }
 
   /* Show submenu when parent has .open class */
   .nav-menu-desktop li.open > .sub-menu,
   .nav-menu-desktop li.open > .wp-block-navigation__submenu-container {
-    display: block;
+    display: block !important;
+    opacity: 1;
+    visibility: visible;
   }
 
   /* Nested submenus (3rd level+) position to the right */
