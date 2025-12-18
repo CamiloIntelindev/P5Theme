@@ -1,0 +1,49 @@
+name: Build Tailwind CSS
+
+on:
+  push:
+    branches: [ "main" ]
+    # Avoid infinite loops when the workflow commits only dist assets
+    paths-ignore:
+      - 'dist/**'
+      - '.github/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build-css:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          npm install --no-audit --no-fund
+
+      - name: Build Tailwind
+        run: |
+          npm run build
+
+      - name: Commit updated CSS
+        env:
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          git add dist/tailwind.css || true
+          if ! git diff --cached --quiet; then
+            git commit -m "build(css): update dist/tailwind.css [skip ci]"
+            git push
+          else
+            echo "No CSS changes to commit."
+          fi
