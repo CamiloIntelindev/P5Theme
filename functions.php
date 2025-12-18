@@ -11,6 +11,7 @@ if (!defined('ABSPATH')) exit;
 
 // Global helpers (gates, debug)
 require_once get_template_directory() . '/inc/globals.php';
+require_once get_template_directory() . '/inc/theme-updates.php';
 
 // Core modules
 require_once get_template_directory() . '/inc/template-tags.php';
