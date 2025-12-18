@@ -209,3 +209,12 @@ function p5m_load_more_posts_callback() {
     ));
   }
 }
+
+// ============================================================================
+// Force rel attributes for portal.sanasana.com links
+// ============================================================================
+add_filter('the_content', function ($content) {
+  $pattern = '/<a\s+([^>]*href=["\']https?:\/\/portal\.sanasana\.com[^"\']*["\'][^>]*)>/i';
+  $replacement = '<a $1 rel="nofollow noopener noreferrer">';
+  return preg_replace($pattern, $replacement, $content);
+}, 20);

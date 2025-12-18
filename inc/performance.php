@@ -40,7 +40,7 @@ add_action('send_headers', function () {
 
 // DNS prefetch y preconnect
 add_action('wp_head', function () {
-  if (is_admin()) return;
+  if (function_exists('p5m_should_optimize') && !p5m_should_optimize()) return;
 
   echo '<link rel="dns-prefetch" href="//cdn.jsdelivr.net">' . PHP_EOL;
   echo '<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>' . PHP_EOL;
@@ -71,7 +71,7 @@ add_action('wp_head', function () {
 
 // Preload critical resources
 add_action('wp_head', function() {
-  if (is_admin()) return;
+  if (function_exists('p5m_should_optimize') && !p5m_should_optimize()) return;
   
   // Preload Tailwind CSS (critical)
   $tw_uri = get_template_directory_uri() . '/dist/tailwind.css';
@@ -139,6 +139,7 @@ add_filter('wp_get_attachment_image_attributes', function ($attr, $attachment, $
 
 // Defer non-critical CSS (menu-item, cache layouts, tabs, price)
 add_filter('style_loader_tag', function ($html, $handle) {
+  if (function_exists('p5m_should_optimize') && !p5m_should_optimize()) return $html;
   // List of non-critical stylesheets to defer
   $defer_handles = [
     'menu-item-style',
@@ -168,7 +169,7 @@ add_filter('style_loader_tag', function ($html, $handle) {
 
 // Defer jQuery Migrate (not critical for initial render)
 add_filter('script_loader_tag', function ($tag, $handle, $src) {
-  if (is_admin() || empty($src)) return $tag;
+  if (is_admin() || empty($src) || (function_exists('p5m_should_optimize') && !p5m_should_optimize())) return $tag;
   
   // Remove defer from jQuery Migrate - just dequeue it instead
   // (Already dequeued above)
@@ -190,6 +191,7 @@ add_filter('script_loader_tag', function ($tag, $handle, $src) {
 
 // Remove jQuery Migrate if not needed
 add_filter('wp_default_scripts', function ($scripts) {
+  if (function_exists('p5m_should_optimize') && !p5m_should_optimize()) return; // keep migrate for admin/BB/editor
   if (!is_admin() && isset($scripts->registered['jquery'])) {
     $script = $scripts->registered['jquery'];
     if ($script->deps) {
@@ -202,8 +204,8 @@ add_filter('wp_default_scripts', function ($scripts) {
 // Keep jQuery in header but optimize it
 // Don't move to footer - some inline scripts depend on it
 add_action('wp_enqueue_scripts', function() {
-  if (!is_admin()) {
-    // Dequeue jQuery Migrate completely
+  if (function_exists('p5m_should_optimize') && p5m_should_optimize()) {
+    // Dequeue jQuery Migrate completely (but keep for BB editor)
     wp_dequeue_script('jquery-migrate');
   }
 }, 100);
@@ -216,6 +218,182 @@ add_filter('wp_resource_hints', function($urls, $relation_type) {
   }
   return $urls;
 }, 10, 2);
+
+// ============================================================================
+// Sanasana Plugin Asset Optimization
+// ============================================================================
+// Conditionally dequeue heavy Sanasana plugin CSS/JS if no related shortcodes
+// appear in the current singular content.
+if (!function_exists('p5m_conditionally_optimize_sanasana_assets')) {
+function p5m_conditionally_optimize_sanasana_assets() {
+  if (is_admin()) return; // Front-end only
+
+  $content = '';
+  $is_singular = is_singular();
+  if ($is_singular) {
+    $post = get_post();
+    if ($post) { $content = $post->post_content; }
+  }
+
+  $shortcode_groups = [
+    'price_table' => 'programs',
+    'price_table_cards' => 'programs',
+    'price_table_cards_nosotros' => 'programs',
+    'price_table_details' => 'programs',
+    'get_program_details' => 'programs',
+    'get_render_program_ahorros' => 'programs',
+    'get_price_table_compare' => 'programs',
+    'compare_programs' => 'programs',
+    'compare_programs_singular' => 'programs',
+    'toggle_button' => 'programs',
+    'tabs' => 'tabs',
+    'evaluation-tabs' => 'tabs',
+    'faq_tabs' => 'faq',
+    'questionnaire_render' => 'questionnaire',
+    'cuestionario' => 'questionnaire',
+    'contact_form' => 'forms',
+    'learn_more_form' => 'forms',
+    'ingresa_button' => 'forms',
+    'afiliate_home_hero_buttons' => 'forms',
+    'conoce_mas_button' => 'forms',
+    'affiliate_button_single_redirection' => 'forms',
+    'affiliate_button_plan_details_top' => 'forms',
+    'affiliate_button_footer' => 'forms',
+    'schedule_button_single_redirection' => 'forms',
+    'resenas_frontend' => 'resenas',
+  ];
+
+  $assets = [
+    'programs' => [ 'styles' => ['pricetable-styles-css'], 'scripts' => ['scripts-price'] ],
+    'tabs'     => [ 'styles' => ['tabstable-styles-css'], 'scripts' => ['scripts-tabs','scripts-tabs-horizontal','scripts-tabs-vertical'] ],
+    'faq'      => [ 'styles' => ['tabstable-styles-css'], 'scripts' => ['scripts-tabs'] ],
+    'questionnaire' => [ 'styles' => ['questionnaire-styles-css'], 'scripts' => [] ],
+    'forms'    => [ 'styles' => ['form-styles-css','sweetalert2','notyf-css','intl-tel-input'], 'scripts' => ['sweetalert2','notyf-js','intl-tel-input','script-general','google-recaptcha'] ],
+    'resenas'  => [ 'styles' => [], 'scripts' => [] ],
+  ];
+
+  $always_allow_scripts = ['jquery','jquery-core','jquery-migrate'];
+
+  $required_groups = [];
+  if ($is_singular && $content) {
+    foreach ($shortcode_groups as $tag => $group) {
+      if (strpos($content, '['.$tag) !== false && has_shortcode($content, $tag)) {
+        $required_groups[$group] = true;
+      }
+    }
+  }
+
+  $plugin_handles_styles = [
+    'pricetable-styles-css','tabstable-styles-css','questionnaire-styles-css','form-styles-css','bootstrap-css','sweetalert2','notyf-css','intl-tel-input'
+  ];
+  $plugin_handles_scripts = [
+    'scripts-price','scripts-tabs','scripts-tabs-horizontal','scripts-tabs-vertical','script-general','bootstrap-js','sweetalert2','notyf-js','intl-tel-input','google-recaptcha'
+  ];
+
+  if (empty($required_groups)) {
+    foreach ($plugin_handles_styles as $h) { wp_dequeue_style($h); wp_deregister_style($h); }
+    foreach ($plugin_handles_scripts as $h) { if (!in_array($h,$always_allow_scripts,true)) { wp_dequeue_script($h); wp_deregister_script($h); } }
+    return;
+  }
+
+  $needed_styles = [];
+  $needed_scripts = [];
+  foreach (array_keys($required_groups) as $group) {
+    if (isset($assets[$group])) {
+      $needed_styles = array_merge($needed_styles, $assets[$group]['styles']);
+      $needed_scripts = array_merge($needed_scripts, $assets[$group]['scripts']);
+    }
+  }
+
+  $needs_bootstrap = isset($required_groups['programs']) || isset($required_groups['tabs']);
+  if ($needs_bootstrap) {
+    $needed_styles[] = 'bootstrap-css';
+    $needed_scripts[] = 'bootstrap-js';
+  }
+
+  if (in_array('google-recaptcha', $needed_scripts, true)) {
+    add_filter('script_loader_tag', function($tag,$handle,$src){
+      if ($handle==='google-recaptcha') {
+        if (strpos($tag,'async')===false) $tag = str_replace('<script ','<script async ',$tag);
+        if (strpos($tag,'defer')===false) $tag = str_replace('<script ','<script defer ',$tag);
+      }
+      return $tag;
+    },10,3);
+  }
+
+  foreach ($plugin_handles_styles as $h) {
+    if (!in_array($h, $needed_styles, true)) { wp_dequeue_style($h); wp_deregister_style($h); }
+  }
+  foreach ($plugin_handles_scripts as $h) {
+    if (!in_array($h, $needed_scripts, true) && !in_array($h,$always_allow_scripts,true)) { wp_dequeue_script($h); wp_deregister_script($h); }
+  }
+}
+}
+add_action('wp_enqueue_scripts', 'p5m_conditionally_optimize_sanasana_assets', 999);
+
+// ============================================================================
+// Beaver Builder Asset Optimization
+// ============================================================================
+if (!function_exists('p5m_conditionally_optimize_bb_assets')) {
+function p5m_conditionally_optimize_bb_assets() {
+  p5m_debug('BB assets: start is_admin='.(is_admin()? '1':'0').', should_opt='.(function_exists('p5m_should_optimize') && p5m_should_optimize()? '1':'0').', is_front_page='.(is_front_page()? '1':'0'));
+  if (is_admin()) { p5m_debug('BB assets: skip (admin)'); return; }
+  if (function_exists('p5m_should_optimize') && !p5m_should_optimize()) { p5m_debug('BB assets: skip (should_optimize=false)'); return; }
+  if (is_front_page()) { p5m_debug('BB assets: skip (front_page)'); return; }
+
+  if (!class_exists('FLBuilderModel')) { p5m_debug('BB assets: FLBuilderModel not found'); return; }
+
+  $is_bb_page = false;
+  $post_id = get_queried_object_id();
+  if (!$post_id) { $post_id = get_the_ID(); }
+  if (!$post_id && is_front_page()) { $post_id = intval(get_option('page_on_front')) ?: 0; }
+  p5m_debug('BB assets: detected post_id=' . (int)$post_id);
+
+  if ($post_id) {
+    if (method_exists('FLBuilderModel', 'is_builder_enabled')) {
+      $is_bb_page = FLBuilderModel::is_builder_enabled($post_id);
+    } else {
+      $is_bb_page = get_post_meta($post_id, '_fl_builder_enabled', true) == '1';
+    }
+  }
+  p5m_debug('BB assets: is_bb_page=' . ($is_bb_page ? '1' : '0'));
+
+  if (!$is_bb_page) {
+    p5m_debug('BB assets: dequeue assets for non-BB page');
+    $bb_layout_handles_styles = [
+      'fl-builder-layout-' . $post_id,
+      'fl-builder-layout-bundle-' . $post_id,
+    ];
+    $bb_layout_handles_scripts = [ 'fl-builder-layout-' . $post_id ];
+
+    $bb_global_styles = [
+      'font-awesome-5','foundation-icons','fl-slideshow','fl-builder-layout-bundle',
+    ];
+    $bb_global_scripts = [
+      'jquery-waypoints','imagesloaded','fl-slideshow','yui3','youtube-player','vimeo-player',
+    ];
+
+    foreach ($bb_layout_handles_styles as $h) { wp_dequeue_style($h); wp_deregister_style($h); }
+    foreach ($bb_layout_handles_scripts as $h) { wp_dequeue_script($h); wp_deregister_script($h); }
+    foreach ($bb_global_styles as $h) { wp_dequeue_style($h); wp_deregister_style($h); }
+    foreach ($bb_global_scripts as $h) { wp_dequeue_script($h); wp_deregister_script($h); }
+  }
+}
+}
+add_action('wp_enqueue_scripts', 'p5m_conditionally_optimize_bb_assets', 999);
+
+// ============================================================================
+// WP Rocket exclusions for BB
+// ============================================================================
+add_filter('rocket_delay_js_exclusions', function($patterns){
+  $patterns[] = 'fl-builder';
+  $patterns[] = 'beaver-builder';
+  return $patterns;
+});
+add_filter('rocket_exclude_defer_js', function($excluded){
+  $excluded[] = 'fl-builder';
+  return $excluded;
+});
 
 // ============================================================================
 // Image Optimization: Compression, WebP conversion, and resizing
@@ -355,6 +533,10 @@ add_filter('the_content', 'p5m_replace_images_with_webp', 10);
 
 function p5m_replace_images_with_webp($content) {
   if (!p5m_get_setting('enable_webp', 1)) {
+    return $content;
+  }
+  // Do not modify content in admin/logged-in/editor modes
+  if (function_exists('p5m_should_optimize') && !p5m_should_optimize()) {
     return $content;
   }
   

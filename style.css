@@ -215,6 +215,62 @@ details.wp-block-details > p{
   color: #000000 !important;
 }
 
+/* Desktop nav submenu toggle (uses .open set by header.js) */
+@media (min-width: 1024px) {
+  .nav-menu-desktop > ul > li,
+  .nav-menu-desktop .menu-item-has-children,
+  .nav-menu-desktop .has-child {
+    position: relative;
+  }
+
+  .nav-menu-desktop .sub-menu,
+  .nav-menu-desktop .wp-block-navigation__submenu-container {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    min-width: 200px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 8px 0;
+    margin-top: 8px;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    transition: opacity 0.2s, visibility 0.2s;
+  }
+
+  .nav-menu-desktop li.open > .sub-menu,
+  .nav-menu-desktop li.open > .wp-block-navigation__submenu-container {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-menu-desktop .sub-menu .sub-menu,
+  .nav-menu-desktop .wp-block-navigation__submenu-container .wp-block-navigation__submenu-container {
+    left: 100%;
+    top: 0;
+    margin-top: 0;
+    margin-left: 4px;
+  }
+
+  .nav-menu-desktop .sub-menu a,
+  .nav-menu-desktop .wp-block-navigation__submenu-container a {
+    display: block;
+    padding: 8px 16px;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+  }
+
+  .nav-menu-desktop .sub-menu a:hover,
+  .nav-menu-desktop .wp-block-navigation__submenu-container a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
 .wpml-ls-current-language > .sub-menu {
     background: #ffffff !important;
     border-radius: 10px !important;

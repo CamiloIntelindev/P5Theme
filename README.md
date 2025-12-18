@@ -35,6 +35,26 @@ npm install
 npm run build
 ```
 
+### Modular Architecture
+
+See `docs/modular-architecture.md` for module responsibilities and load order. The theme keeps `functions.php` as a thin bootstrap that requires `inc/*` modules grouped by concern.
+
+### Runtime Verification
+
+See `docs/runtime-checklist.md` for quick steps to validate analytics injection, sitemap filters, performance guards, and UI behaviors.
+
+### Scan for Duplicate Hooks
+
+Use the helper script to scan for common hooks/injections and ensure they live in the right module:
+
+```bash
+bash scripts/scan-theme-hooks.sh
+```
+
+### Contributing
+
+See `docs/contributing.md` for naming conventions, hook priorities, enqueue patterns, i18n/escaping rules, and module guidelines.
+
 ## Templates
 
 - `404.php`, `search.php`, `archive.php`, `page.php`, `singular.php`

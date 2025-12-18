@@ -245,3 +245,42 @@ add_action('wp_footer', function () {
   echo PHP_EOL . '<!-- P5M Immediate Footer Scripts -->' . PHP_EOL;
   echo $scripts . PHP_EOL;
 }, 999);
+
+  // ============================================================================
+  // Ahrefs analytics key injection (domain-based)
+  // ============================================================================
+  add_action('wp_head', function () {
+    if (is_admin()) return;
+    $host = preg_replace('/^www\./', '', parse_url(home_url(), PHP_URL_HOST));
+    $key = ($host === 'sanasana.com') ? 'mToHRUoAWeqVSKj443GOTQ' : 'hGdhcZnN5sydTuwCud0QXA';
+    echo '<script src="https://analytics.ahrefs.com/analytics.js" data-key="' . esc_attr($key) . '" async></script>';
+  }, 1);
+
+  // ============================================================================
+  // RankMath sitemap adjustments
+  // ============================================================================
+  add_filter( 'rank_math/sitemap/entry', function( $url, $type, $object ) {
+    $exclude_url = home_url('/programa/');
+    if ( $url === $exclude_url ) { return false; }
+    return $url;
+  }, 10, 3 );
+
+  add_filter('rank_math/sitemap/entry', function($url, $type, $object){
+    if (empty($url)) return $url;
+    $p    = wp_parse_url($url);
+    $path = isset($p['path']) ? rtrim($p['path'], '/') : '';
+    $host = isset($p['host']) ? strtolower($p['host']) : '';
+    if ($path === '') return $url;
+    $slugs = ['faq-tab', 'resena', 'tabs', 'promocion'];
+    foreach ($slugs as $slug) {
+      if (preg_match('#^/(?:en/)?' . preg_quote($slug, '#') . '$#i', $path)) {
+        return '';
+      }
+    }
+    if ($host === 'portal.sanasana.com') {
+      if (preg_match('#^/(login|affiliate)$#i', $path)) { return ''; }
+    }
+    return $url;
+  }, 10, 3);
+
+  add_filter('rank_math/sitemap/enable_caching', '__return_false');
