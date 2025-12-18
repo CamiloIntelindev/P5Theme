@@ -74,7 +74,7 @@ add_action('admin_init', function() {
   add_settings_field('p5m_header_cta_bg_color', __('Background color', 'p5marketing'), 'p5m_field_header_color_cb', 'p5m-header-settings', 'p5m_header_cta_section', ['key' => 'cta_bg_color', 'placeholder' => '#4f46e5']);
   add_settings_field('p5m_header_cta_text_color', __('Text color', 'p5marketing'), 'p5m_field_header_color_cb', 'p5m-header-settings', 'p5m_header_cta_section', ['key' => 'cta_text_color', 'placeholder' => '#ffffff']);
   add_settings_field('p5m_header_cta_padding', __('Padding', 'p5marketing'), 'p5m_field_header_cta_padding_cb', 'p5m-header-settings', 'p5m_header_cta_section');
-  add_settings_field('p5m_header_cta_border', __('Borde', 'p5marketing'), 'p5m_field_header_cta_border_cb', 'p5m-header-settings', 'p5m_header_cta_section');
+  add_settings_field('p5m_header_cta_border', __('Border', 'p5marketing'), 'p5m_field_header_cta_border_cb', 'p5m-header-settings', 'p5m_header_cta_section');
   add_settings_field('p5m_header_cta_border_radius', __('Border Radius', 'p5marketing'), 'p5m_field_header_cta_border_radius_cb', 'p5m-header-settings', 'p5m_header_cta_section');
   add_settings_field('p5m_header_cta_hover_bg', __('Hover - background color', 'p5marketing'), 'p5m_field_header_color_cb', 'p5m-header-settings', 'p5m_header_cta_section', ['key' => 'cta_hover_bg_color', 'placeholder' => '#4338ca']);
   add_settings_field('p5m_header_cta_hover_text', __('Hover - text color', 'p5marketing'), 'p5m_field_header_color_cb', 'p5m-header-settings', 'p5m_header_cta_section', ['key' => 'cta_hover_text_color', 'placeholder' => '#ffffff']);
@@ -127,8 +127,8 @@ function p5m_field_header_logo_cb() {
   echo '<div style="display:flex;align-items:center;gap:12px">';
   echo '<input id="p5m_header_logo" name="p5m_header_settings[logo]" type="text" value="'. $val .'" class="regular-text" placeholder="' . esc_attr(get_template_directory_uri() . '/assets/img/logo-fallback.svg') . '" />';
   echo '<input id="p5m_header_logo_id" name="p5m_header_settings[logo_id]" type="hidden" value="'. $id .'" />';
-  echo '<button class="button p5m-media-upload" data-target="#p5m_header_logo" data-target-id="#p5m_header_logo_id">Seleccionar imagen</button>';
-  echo '<button class="button p5m-media-remove" type="button">Eliminar</button>';
+  echo '<button class="button p5m-media-upload" data-target="#p5m_header_logo" data-target-id="#p5m_header_logo_id">' . esc_html__('Select image', 'p5marketing') . '</button>';
+  echo '<button class="button p5m-media-remove" type="button">' . esc_html__('Remove', 'p5marketing') . '</button>';
   if ($val) echo '<img id="p5m_header_logo_preview" src="'. esc_url($val) .'" alt="preview" style="max-height:48px;display:block;border-radius:4px;" />';
   else echo '<img id="p5m_header_logo_preview" src="" alt="preview" style="max-height:48px;display:none;border-radius:4px;" />';
   echo '</div>';
@@ -262,14 +262,14 @@ function p5m_field_header_cta_border_radius_cb() {
   echo '<p class="description">' . __('Border radius in CSS format (e.g., "8px", "0.5rem", "50%"). Leave empty to use the default.', 'p5marketing') . '</p>';
 }
 
-// Campo: borde inferior
+// Field: bottom border
 function p5m_field_header_border_cb() {
   $opts = get_option('p5m_header_settings', []);
   $checked = !empty($opts['border_bottom']) ? 'checked' : '';
-  echo '<label><input type="checkbox" name="p5m_header_settings[border_bottom]" value="1" ' . $checked . ' /> ' . esc_html__('Mostrar borde inferior', 'p5marketing') . '</label>';
+  echo '<label><input type="checkbox" name="p5m_header_settings[border_bottom]" value="1" ' . $checked . ' /> ' . esc_html__('Show bottom border', 'p5marketing') . '</label>';
 }
 
-// Campo: modo de fondo
+// Field: background mode
 function p5m_field_header_background_mode_cb() {
   $opts = get_option('p5m_header_settings', []);
   $val = $opts['background_mode'] ?? 'solid';
@@ -299,7 +299,7 @@ function p5m_field_header_gradient_direction_cb() {
   echo '</select>';
 }
 
-// Umbral de scroll
+// Scroll threshold
 function p5m_field_header_scroll_threshold_cb() {
   $opts = get_option('p5m_header_settings', []);
   $val = isset($opts['scroll_threshold']) ? intval($opts['scroll_threshold']) : 0;
@@ -340,7 +340,7 @@ function p5m_header_settings_sanitize($input) {
   // Position
   if (isset($input['position'])) {
     $val = sanitize_text_field($input['position']);
-    // Permitir: sticky, static, fixed (mantener compatibilidad con 'scroll')
+    // Allow: sticky, static, fixed (keep compatibility with 'scroll')
     if ($val === 'scroll') { $val = 'static'; }
     $out['position'] = in_array($val, ['sticky', 'static', 'fixed']) ? $val : 'sticky';
   }
@@ -388,7 +388,7 @@ function p5m_header_settings_sanitize($input) {
     $out['scroll_threshold'] = absint($input['scroll_threshold']);
   }
 
-  // Opacidades 0–1
+  // Opacities 0–1
   $opacity_keys = ['bg_opacity','gradient_start_opacity','gradient_end_opacity','scrolled_bg_opacity'];
   foreach ($opacity_keys as $ok) {
     if (isset($input[$ok]) && $input[$ok] !== '') {
@@ -445,7 +445,7 @@ function p5m_header_settings_sanitize($input) {
     $out['layout_order'] = in_array($val, $allowed) ? $val : 'logo-nav-cta';
   }
   
-  // Grillas personalizables (permiten HTML y shortcodes)
+  // Custom grids (allow HTML and shortcodes)
   $grid_keys = ['top_col1', 'top_col2', 'top_col3', 'bottom_col1', 'bottom_col2', 'bottom_col3'];
   foreach ($grid_keys as $gk) {
     if (isset($input[$gk])) {
@@ -500,7 +500,7 @@ function p5m_header_settings_page_html() {
             </table>
           </div>
 
-          <!-- Estilos y comportamiento -->
+          <!-- Styles and behavior -->
           <div class="p5m-tab-content" data-p5m-tab="style" style="display:none;">
             <h2><?php esc_html_e('Styles and behavior', 'p5marketing'); ?></h2>
             <p><?php esc_html_e('Control the bottom border, background, and behavior on scroll.', 'p5marketing'); ?></p>
@@ -511,7 +511,7 @@ function p5m_header_settings_page_html() {
             </table>
           </div>
 
-          <!-- Grillas personalizables -->
+          <!-- Custom grids -->
           <div class="p5m-tab-content" data-p5m-tab="grids" style="display:none;">
             <h2><?php esc_html_e('Custom grids', 'p5marketing'); ?></h2>
             <?php p5m_header_grids_section_cb(); ?>
@@ -533,9 +533,9 @@ function p5m_header_settings_page_html() {
       var targetId = $(btn.data('target-id'));
       
       var frame = wp.media({
-        title: 'Selecciona una imagen',
+        title: 'Select an image',
         library: { type: 'image' },
-        button: { text: 'Usar esta imagen' },
+        button: { text: 'Use this image' },
         multiple: false
       });
       
