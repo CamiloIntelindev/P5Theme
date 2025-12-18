@@ -17,6 +17,14 @@ A lightweight, Tailwind-based WordPress theme focused on performance and modern 
 - When `dist/tailwind.css` changes, the bot commits it with `[skip ci]` to avoid loops.
 - Editors who don’t run Node locally can rely on the workflow: push changes (or merge PRs) and pull the updated `dist/tailwind.css` after the check completes.
 
+### Releases & theme updates
+
+- Bump `Version:` in `style.css` (e.g., 1.2.3).
+- Tag the repo `v1.2.3` (or `1.2.3`) and publish a GitHub release; release notes appear in the update modal.
+- Sites running the theme will see the update notice in Appearance → Themes. They update in one click.
+- Fallback: if no releases exist, the updater uses the latest GitHub tag.
+- Optional (avoid GitHub rate limits): set `P5M_GITHUB_TOKEN` in `wp-config.php` or hosting env vars.
+
 ## Theme Settings
 
 Settings are available under Appearance → P5 Settings and include:

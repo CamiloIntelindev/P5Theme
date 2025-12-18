@@ -1,8 +1,9 @@
 <?php
 /**
- * Theme self-updates from GitHub releases.
+ * Theme self-updates from GitHub releases (with tag fallback).
  *
  * Checks the latest GitHub release for this repo and surfaces updates in WP Admin → Themes.
+ * If no releases exist, falls back to the latest tag.
  *
  * @package P5Marketing
  */
@@ -85,6 +86,77 @@ function p5m_fetch_latest_release() {
 }
 
 /**
+ * Fetch latest tag (fallback when no releases exist).
+ */
+function p5m_fetch_latest_tag() {
+  $cached = get_site_transient('p5m_theme_update_tag');
+  if ($cached !== false) return $cached;
+
+  $api = 'https://api.github.com/repos/' . P5M_UPDATE_REPO . '/tags?per_page=1';
+  $headers = [
+    'User-Agent' => 'p5marketing-theme-updater',
+    'Accept' => 'application/vnd.github+json',
+  ];
+  $token = p5m_get_github_token();
+  if ($token) {
+    $headers['Authorization'] = 'Bearer ' . $token;
+  }
+
+  $resp = wp_remote_get($api, [
+    'headers' => $headers,
+    'timeout' => 10,
+  ]);
+
+  if (is_wp_error($resp)) {
+    set_site_transient('p5m_theme_update_tag', [], HOUR_IN_SECONDS * 2);
+    return [];
+  }
+
+  $code = wp_remote_retrieve_response_code($resp);
+  if ($code !== 200) {
+    set_site_transient('p5m_theme_update_tag', [], HOUR_IN_SECONDS * 2);
+    return [];
+  }
+
+  $body = json_decode(wp_remote_retrieve_body($resp), true);
+  if (!is_array($body) || empty($body[0]['name'])) {
+    set_site_transient('p5m_theme_update_tag', [], HOUR_IN_SECONDS * 2);
+    return [];
+  }
+
+  $tag = ltrim($body[0]['name'], 'v');
+  $zip_url = isset($body[0]['zipball_url']) ? $body[0]['zipball_url'] : '';
+  $html_url = 'https://github.com/' . P5M_UPDATE_REPO . '/releases/tag/' . $body[0]['name'];
+
+  $data = [
+    'version'   => $tag,
+    'zip_url'   => $zip_url,
+    'html_url'  => $html_url,
+    'changelog' => '',
+  ];
+
+  set_site_transient('p5m_theme_update_tag', $data, HOUR_IN_SECONDS * 6);
+  return $data;
+}
+
+/**
+ * Unified fetch: try release, then fallback to tag.
+ */
+function p5m_fetch_latest_version_data() {
+  $release = p5m_fetch_latest_release();
+  if (!empty($release['version'])) {
+    return $release;
+  }
+
+  $tag = p5m_fetch_latest_tag();
+  if (!empty($tag['version'])) {
+    return $tag;
+  }
+
+  return [];
+}
+
+/**
  * Inject update info into the theme update transient.
  */
 function p5m_theme_check_for_update($transient) {
@@ -95,7 +167,7 @@ function p5m_theme_check_for_update($transient) {
   $current = wp_get_theme(P5M_UPDATE_THEME_SLUG);
   if (!$current->exists()) return $transient;
 
-  $release = p5m_fetch_latest_release();
+  $release = p5m_fetch_latest_version_data();
   if (empty($release['version'])) return $transient;
 
   if (version_compare($release['version'], $current->get('Version'), '>')) {
@@ -120,7 +192,7 @@ function p5m_theme_updates_api($result, $action, $args) {
   }
 
   $current = wp_get_theme(P5M_UPDATE_THEME_SLUG);
-  $release = p5m_fetch_latest_release();
+  $release = p5m_fetch_latest_version_data();
 
   $result = new stdClass();
   $result->name = $current->get('Name');
