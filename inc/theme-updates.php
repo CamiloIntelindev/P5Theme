@@ -209,3 +209,33 @@ function p5m_theme_updates_api($result, $action, $args) {
   return $result;
 }
 add_filter('themes_api', 'p5m_theme_updates_api', 10, 3);
+
+/**
+ * Admin reminder: tag a release after bumping style.css version.
+ * Shown at most once per week to admins on Themes/Updates screens.
+ */
+function p5m_theme_update_reminder_notice() {
+  if (!current_user_can('manage_options')) return;
+  $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+  $allowed = ['themes', 'update-core'];
+  if ($screen && !in_array($screen->base, $allowed, true)) return;
+
+  $seen = get_site_transient('p5m_theme_update_reminder_seen');
+  if ($seen) return;
+
+  $theme = wp_get_theme(P5M_UPDATE_THEME_SLUG);
+  $version = $theme->exists() ? $theme->get('Version') : '';
+
+  echo '<div class="notice notice-info is-dismissible">';
+  echo '<p><strong>' . esc_html__('P5Marketing update reminder', 'p5marketing') . ':</strong> ';
+  echo esc_html__('After changing the theme version, tag and publish a GitHub release (e.g., v1.2.3) so sites receive the update notice.', 'p5marketing');
+  if ($version) {
+    echo ' ' . sprintf(esc_html__('Current installed version: %s.', 'p5marketing'), esc_html($version));
+  }
+  echo ' <a href="https://github.com/' . esc_attr(P5M_UPDATE_REPO) . '/releases" target="_blank" rel="noopener noreferrer">' . esc_html__('Open releases', 'p5marketing') . '</a>';
+  echo '</p></div>';
+
+  // Avoid spamming: show once per week
+  set_site_transient('p5m_theme_update_reminder_seen', 1, WEEK_IN_SECONDS);
+}
+add_action('admin_notices', 'p5m_theme_update_reminder_notice');
