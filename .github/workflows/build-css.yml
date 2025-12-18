@@ -3,10 +3,26 @@ name: Build Tailwind CSS
 on:
   push:
     branches: [ "main" ]
-    # Avoid infinite loops when the workflow commits only dist assets
-    paths-ignore:
-      - 'dist/**'
-      - '.github/**'
+    # Rebuild when CSS, config, templates, or JS change
+    paths:
+      - 'src/css/**'
+      - 'tailwind.config.js'
+      - 'postcss.config.js'
+      - 'package.json'
+      - '**/*.php'
+      - '**/*.html'
+      - 'assets/js/**/*.js'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'src/css/**'
+      - 'tailwind.config.js'
+      - 'postcss.config.js'
+      - 'package.json'
+      - '**/*.php'
+      - '**/*.html'
+      - 'assets/js/**/*.js'
+  workflow_dispatch:
 
 permissions:
   contents: write
