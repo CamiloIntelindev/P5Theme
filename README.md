@@ -1,5 +1,7 @@
 # P5Marketing Theme
 
+[![Build Tailwind CSS](https://github.com/CamiloIntelindev/P5Theme/actions/workflows/build-css.yml/badge.svg)](https://github.com/CamiloIntelindev/P5Theme/actions/workflows/build-css.yml)
+
 A lightweight, Tailwind-based WordPress theme focused on performance and modern UX.
 
 ## Quick Start
@@ -8,6 +10,12 @@ A lightweight, Tailwind-based WordPress theme focused on performance and modern 
 2. Run `npm install` (if you need to modify CSS/JS).
 3. Build styles with `npm run build`.
 4. Activate the theme in Appearance → Themes.
+
+### CSS build via CI
+
+- The GitHub Actions workflow builds Tailwind on pushes/PRs that touch templates, Tailwind config, JS, or CSS.
+- When `dist/tailwind.css` changes, the bot commits it with `[skip ci]` to avoid loops.
+- Editors who don’t run Node locally can rely on the workflow: push changes (or merge PRs) and pull the updated `dist/tailwind.css` after the check completes.
 
 ## Theme Settings
 
